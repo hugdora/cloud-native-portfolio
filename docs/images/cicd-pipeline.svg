@@ -1,0 +1,112 @@
+<svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace">
+
+  <rect width="800" height="320" fill="#04060f"/>
+
+  <text x="400" y="36" text-anchor="middle" fill="#4af0b8" font-size="13" font-weight="600" letter-spacing="2">CI/CD PIPELINE — DUAL TRACK DELIVERY</text>
+  <line x1="80" y1="48" x2="720" y2="48" stroke="#1a2444" stroke-width="1"/>
+
+  <defs>
+    <marker id="ci-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#4af0b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ci-arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#3a7fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ci-arrow-dim" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#2a3a60" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- ═══ TRIGGER ═══ -->
+  <rect x="30" y="130" width="80" height="50" rx="6" fill="#080d1c" stroke="#2a3a60" stroke-width="1.5"/>
+  <text x="70" y="152" text-anchor="middle" fill="#e8edf8" font-size="11" font-weight="600">git push</text>
+  <text x="70" y="168" text-anchor="middle" fill="#3d4f7a" font-size="9">main branch</text>
+  <text x="70" y="179" text-anchor="middle" fill="#3d4f7a" font-size="8">triggers workflow</text>
+
+  <line x1="110" y1="155" x2="138" y2="155" stroke="#4af0b8" stroke-width="1.5" marker-end="url(#ci-arrow)"/>
+
+  <!-- ═══ CI JOB ═══ -->
+  <rect x="140" y="80" width="130" height="150" rx="6" fill="#080d1c" stroke="#4af0b8" stroke-width="2"/>
+  <text x="205" y="103" text-anchor="middle" fill="#4af0b8" font-size="12" font-weight="700">CI Job</text>
+  <line x1="155" y1="112" x2="255" y2="112" stroke="#1a2444" stroke-width="1"/>
+
+  <!-- stages inside CI -->
+  <rect x="155" y="120" width="100" height="20" rx="3" fill="#0b1120" stroke="#1a2444" stroke-width="1"/>
+  <text x="205" y="134" text-anchor="middle" fill="#7c8fbb" font-size="9">lint (ESLint)</text>
+
+  <rect x="155" y="146" width="100" height="20" rx="3" fill="#0b1120" stroke="#1a2444" stroke-width="1"/>
+  <text x="205" y="160" text-anchor="middle" fill="#7c8fbb" font-size="9">type-check (tsc)</text>
+
+  <rect x="155" y="172" width="100" height="20" rx="3" fill="#0b1120" stroke="#1a2444" stroke-width="1"/>
+  <text x="205" y="186" text-anchor="middle" fill="#7c8fbb" font-size="9">test</text>
+
+  <rect x="155" y="198" width="100" height="20" rx="3" fill="#0b1120" stroke="#1a2444" stroke-width="1"/>
+  <text x="205" y="212" text-anchor="middle" fill="#7c8fbb" font-size="9">next build</text>
+
+  <!-- ═══ FORK ═══ -->
+  <!-- upper fork arrow → static -->
+  <line x1="270" y1="130" x2="318" y2="108" stroke="#4af0b8" stroke-width="1.5" marker-end="url(#ci-arrow)"/>
+  <!-- lower fork arrow → k8s -->
+  <line x1="270" y1="180" x2="318" y2="202" stroke="#3a7fff" stroke-width="1.5" marker-end="url(#ci-arrow-blue)"/>
+
+  <!-- Fork label -->
+  <text x="294" y="160" text-anchor="middle" fill="#3d4f7a" font-size="8">parallel</text>
+  <text x="294" y="170" text-anchor="middle" fill="#3d4f7a" font-size="8">on success</text>
+
+  <!-- ═══ STATIC DEPLOY JOB ═══ -->
+  <rect x="320" y="68" width="140" height="80" rx="6" fill="#080d1c" stroke="#4af0b8" stroke-width="1.5"/>
+  <text x="390" y="89" text-anchor="middle" fill="#4af0b8" font-size="11" font-weight="600">Static Deploy</text>
+  <line x1="335" y1="97" x2="445" y2="97" stroke="#1a2444" stroke-width="1"/>
+  <text x="390" y="112" text-anchor="middle" fill="#7c8fbb" font-size="9">next build → out/</text>
+  <text x="390" y="126" text-anchor="middle" fill="#3d4f7a" font-size="9">aws s3 sync --delete</text>
+  <text x="390" y="140" text-anchor="middle" fill="#3d4f7a" font-size="9">cloudfront invalidation</text>
+
+  <!-- Arrow static → S3+CF -->
+  <line x1="460" y1="108" x2="498" y2="108" stroke="#4af0b8" stroke-width="1.5" marker-end="url(#ci-arrow)"/>
+
+  <!-- ═══ S3 + CloudFront result ═══ -->
+  <rect x="500" y="68" width="130" height="80" rx="6" fill="#080d1c" stroke="#2a3a60" stroke-width="1.5"/>
+  <text x="565" y="89" text-anchor="middle" fill="#e8edf8" font-size="11" font-weight="600">S3 + CloudFront</text>
+  <line x1="515" y1="97" x2="615" y2="97" stroke="#1a2444" stroke-width="1"/>
+  <text x="565" y="112" text-anchor="middle" fill="#7c8fbb" font-size="9">Static files uploaded</text>
+  <text x="565" y="126" text-anchor="middle" fill="#3d4f7a" font-size="9">Cache invalidated</text>
+  <text x="565" y="140" text-anchor="middle" fill="#4af0b8" font-size="9">✓ Live at doraejangue.com</text>
+
+  <!-- ═══ K8S DEPLOY JOB ═══ -->
+  <rect x="320" y="188" width="140" height="80" rx="6" fill="#080d1c" stroke="#3a7fff" stroke-width="1.5"/>
+  <text x="390" y="209" text-anchor="middle" fill="#3a7fff" font-size="11" font-weight="600">K8s Deploy</text>
+  <line x1="335" y1="217" x2="445" y2="217" stroke="#1a2444" stroke-width="1"/>
+  <text x="390" y="232" text-anchor="middle" fill="#7c8fbb" font-size="9">docker build + push</text>
+  <text x="390" y="246" text-anchor="middle" fill="#3d4f7a" font-size="9">helm upgrade --install</text>
+  <text x="390" y="260" text-anchor="middle" fill="#3d4f7a" font-size="9">rolling update</text>
+
+  <!-- Arrow k8s → K8s cluster -->
+  <line x1="460" y1="228" x2="498" y2="228" stroke="#3a7fff" stroke-width="1.5" marker-end="url(#ci-arrow-blue)"/>
+
+  <!-- ═══ K8S CLUSTER result ═══ -->
+  <rect x="500" y="188" width="130" height="80" rx="6" fill="#080d1c" stroke="#3a7fff" stroke-width="1.5"/>
+  <text x="565" y="209" text-anchor="middle" fill="#3a7fff" font-size="11" font-weight="600">K8s Cluster</text>
+  <line x1="515" y1="217" x2="615" y2="217" stroke="#1a2444" stroke-width="1"/>
+  <text x="565" y="232" text-anchor="middle" fill="#7c8fbb" font-size="9">New pods scheduled</text>
+  <text x="565" y="246" text-anchor="middle" fill="#3d4f7a" font-size="9">Zero-downtime rollout</text>
+  <text x="565" y="260" text-anchor="middle" fill="#4af0b8" font-size="9">✓ Ingress serving traffic</text>
+
+  <!-- ═══ IAM OIDC side note ═══ -->
+  <rect x="648" y="140" width="130" height="56" rx="4" fill="#080d1c" stroke="#1a2444" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="713" y="160" text-anchor="middle" fill="#7c8fbb" font-size="10" font-weight="600">IAM OIDC</text>
+  <text x="713" y="176" text-anchor="middle" fill="#3d4f7a" font-size="9">Short-lived token</text>
+  <text x="713" y="189" text-anchor="middle" fill="#3d4f7a" font-size="9">No stored secrets</text>
+  <!-- line OIDC → static -->
+  <line x1="648" y1="155" x2="630" y2="130" stroke="#1a2444" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- line OIDC → k8s -->
+  <line x1="648" y1="175" x2="630" y2="210" stroke="#1a2444" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- ═══ LEGEND ═══ -->
+  <line x1="140" y1="290" x2="160" y2="290" stroke="#4af0b8" stroke-width="2"/>
+  <text x="166" y="294" fill="#7c8fbb" font-size="9">Static deploy path</text>
+  <line x1="270" y1="290" x2="290" y2="290" stroke="#3a7fff" stroke-width="2"/>
+  <text x="296" y="294" fill="#7c8fbb" font-size="9">K8s deploy path</text>
+  <line x1="400" y1="290" x2="420" y2="290" stroke="#1a2444" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="426" y="294" fill="#7c8fbb" font-size="9">Auth / config</text>
+
+</svg>
