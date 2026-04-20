@@ -6,6 +6,8 @@ Terraform-managed AWS infrastructure for [doraejangue.com](https://doraejangue.c
 
 ## Architecture
 
+![Terraform Infrastructure](../docs/images/terraform-infrastructure.svg)
+
 ```
 User → Route 53 (A alias) → CloudFront → S3 (private, OAC)
                                        ↑

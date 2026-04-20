@@ -14,6 +14,8 @@ This repository is both the **source code for the portfolio website** and a **de
 
 ## Architecture
 
+![Platform Architecture](docs/images/architecture-overview.svg)
+
 ```
 User → Route 53 → CloudFront → S3 (private via OAC)
 ```
@@ -30,6 +32,8 @@ User → Route 53 → CloudFront → S3 (private via OAC)
 | CI/CD | GitHub Actions | Two deploy paths, IAM OIDC auth |
 
 ### Two deployment tracks
+
+![CI/CD Pipeline](docs/images/cicd-pipeline.svg)
 
 **Track 1 — AWS Static (primary)**
 ```
