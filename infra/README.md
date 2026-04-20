@@ -1,37 +1,74 @@
-# AWS Static Website Infrastructure
+# Infrastructure
 
-## Overview
+Terraform-managed AWS infrastructure for [doraejangue.com](https://doraejangue.com).
 
-This infrastructure hosts a static website using AWS S3 and CloudFront.
-
-## Architecture
-
-* S3 bucket stores website files
-* Bucket is private (no public access)
-* CloudFront distributes content globally
-* Origin Access Control (OAC) allows CloudFront to securely access S3
-
-## Request Flow
-
-User → CloudFront → OAC → S3 (private)
+---
 
 ## Architecture
 
-This portfolio is deployed using AWS with a secure, production-grade setup:
+```
+User → Route 53 (A alias) → CloudFront → S3 (private, OAC)
+                                       ↑
+                               ACM certificate (us-east-1)
+```
 
-- Static site generated using Next.js
-- Hosted in a private Amazon S3 bucket
-- Delivered via Amazon CloudFront (CDN)
-- Access to S3 is restricted using Origin Access Control (OAC)
+## What Terraform provisions
 
-CloudFront is the only service allowed to retrieve content from the S3 bucket, ensuring the origin remains private and secure.
+| Resource | Purpose |
+|---|---|
+| `aws_s3_bucket` | Private origin bucket for static files |
+| `aws_s3_bucket_public_access_block` | Block all public S3 access |
+| `aws_cloudfront_origin_access_control` | OAC for SigV4-signed CF→S3 requests |
+| `aws_cloudfront_distribution` | CDN, HTTPS, edge delivery |
+| `aws_s3_bucket_policy` | Allow only CloudFront to read from S3 |
+| `aws_acm_certificate` | TLS cert (must be in us-east-1 for CloudFront) |
+| `aws_route53_record` | A alias record pointing domain → CloudFront |
+
+## Structure
+
+```
+infra/
+├── modules/
+│   └── s3_site/
+│       ├── main.tf         # S3 + OAC + CloudFront + bucket policy
+│       ├── variables.tf    # Input variables
+│       └── outputs.tf      # Bucket name, CF domain, CF ARN
+└── envs/
+    ├── dev/
+    │   ├── main.tf         # Dev environment wiring
+    │   ├── variables.tf
+    │   └── terraform.tfvars  # ← gitignored, never committed
+    └── prod/
+        ├── main.tf         # Prod environment wiring
+        └── variables.tf
+```
+
+## Usage
+
+```bash
+# From the environment folder
+cd infra/envs/dev
+
+terraform init
+terraform validate
+terraform plan -var-file="terraform.tfvars"
+terraform apply
+```
 
 ## Security
 
-* S3 public access is blocked
-* Only CloudFront can read from the bucket
-* No direct public access to S3 objects
+- S3 public access is fully blocked at bucket level
+- Only CloudFront can read from S3 via OAC + bucket policy
+- `terraform.tfvars` and `*.tfstate` are gitignored — never committed
+- IAM OIDC is used for GitHub Actions deployments — no stored AWS credentials
 
-## Status
+## Outputs
 
-Infrastructure deployed successfully using Terraform.
+After `terraform apply`:
+
+| Output | Description |
+|---|---|
+| `bucket_name` | S3 bucket name |
+| `bucket_arn` | S3 bucket ARN |
+| `cloudfront_domain_name` | e.g. `d123example.cloudfront.net` |
+| `cloudfront_distribution_arn` | Full CloudFront ARN |
