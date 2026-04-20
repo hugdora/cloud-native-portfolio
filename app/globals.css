@@ -1,11 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap");
+
 @import "tailwindcss";
+
+:root {
+  --bg: #04060f;
+  --bg2: #080d1c;
+  --bg3: #0d1428;
+  --border: #1a2444;
+  --border2: #2a3a60;
+  --text: #e8edf8;
+  --muted: #7c8fbb;
+  --accent: #4af0b8;
+  --accent2: #3a7fff;
+  --dim: #3d4f7a;
+  --card: #0b1120;
+}
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #020617;
-  color: #ffffff;
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 3px;
 }

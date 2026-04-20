@@ -1,34 +1,82 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { siteConfig } from "@/lib/site";
 
 const links = [
   { href: "/projects", label: "Projects" },
   { href: "/architecture", label: "Architecture" },
-  { href: "/platform", label: "Platform" },
   { href: "/writing", label: "Writing" },
   { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
-  return (
-    <header className="border-b border-slate-800">
-      <div className="mx-auto max-w-6xl px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="text-white font-semibold">
-          Huguette Dora Edjangue
-        </Link>
+  const pathname = usePathname();
 
-        <nav className="hidden md:flex gap-6">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-slate-300 hover:text-white text-sm"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+  return (
+    <header
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "20px 32px",
+        borderBottom: "1px solid var(--border)",
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        background: "rgba(4,6,15,0.92)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+      }}
+    >
+      <Link
+        href="/"
+        style={{
+          fontFamily: "Syne, sans-serif",
+          fontWeight: 700,
+          fontSize: "15px",
+          color: "var(--text)",
+          letterSpacing: "0.04em",
+          textDecoration: "none",
+        }}
+      >
+        dora<span style={{ color: "var(--accent)" }}>.</span>ed
+      </Link>
+
+      <nav>
+        <ul
+          style={{
+            display: "flex",
+            gap: "24px",
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          {links.map((link) => {
+            const active = pathname === link.href || pathname.startsWith(link.href + "/");
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  style={{
+                    color: active ? "var(--accent)" : "var(--muted)",
+                    textDecoration: "none",
+                    fontSize: "12px",
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase" as const,
+                    transition: "color 0.2s",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </header>
   );
 }

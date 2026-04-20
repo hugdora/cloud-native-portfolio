@@ -1,52 +1,119 @@
 const groups = [
   {
     title: "Cloud Infrastructure",
-    items: ["AWS", "IAM", "S3", "CloudFront", "Route 53", "ACM"],
+    items: ["AWS", "IAM", "S3", "CloudFront", "Route 53", "ACM", "OAC"],
   },
   {
     title: "Infrastructure as Code",
-    items: ["Terraform modules", "Environment separation", "Reusable provisioning"],
+    items: ["Terraform", "Modules", "Env separation", "State management"],
   },
   {
     title: "Containers & Orchestration",
-    items: ["Docker", "Kubernetes", "Deployments", "Services", "Ingress", "Helm"],
+    items: ["Docker", "Kubernetes", "Deployments", "Services", "Ingress", "Helm", "Probes"],
   },
   {
     title: "CI/CD & Automation",
-    items: ["GitHub Actions", "Build pipelines", "Release workflows", "Quality gates"],
+    items: ["GitHub Actions", "Jenkins", "IAM OIDC", "Build pipelines", "Quality gates"],
   },
 ];
 
 export default function Capabilities() {
   return (
-    <section className="py-20">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="space-y-10">
-          <div className="max-w-3xl space-y-3">
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-400">
-              Core Capabilities
-            </p>
-            <h2 className="text-3xl font-semibold tracking-tight text-white">
-              Focused on shipping and operating cloud-native systems
-            </h2>
-          </div>
+    <section style={{ padding: "56px 32px" }}>
+      <div
+        style={{
+          fontSize: "10px",
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          color: "var(--accent)",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginBottom: "16px",
+        }}
+      >
+        Core capabilities
+        <span
+          style={{
+            flex: 1,
+            height: "1px",
+            background: "var(--border)",
+            maxWidth: "200px",
+          }}
+        />
+      </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {groups.map((group) => (
-              <div
-                key={group.title}
-                className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6"
-              >
-                <h3 className="mb-4 text-lg font-semibold text-white">{group.title}</h3>
-                <ul className="space-y-2 text-sm text-slate-300">
-                  {group.items.map((item) => (
-                    <li key={item}>• {item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+      <h2
+        style={{
+          fontFamily: "Syne, sans-serif",
+          fontSize: "clamp(20px, 3vw, 28px)",
+          fontWeight: 700,
+          color: "#fff",
+          marginBottom: "8px",
+          letterSpacing: "-0.01em",
+        }}
+      >
+        Focused on shipping and operating cloud-native systems
+      </h2>
+      <p
+        style={{
+          color: "var(--muted)",
+          fontSize: "13px",
+          lineHeight: 1.7,
+          marginBottom: "32px",
+        }}
+      >
+        The full stack from IAM policies to ingress controllers.
+      </p>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "1px",
+          background: "var(--border)",
+        }}
+      >
+        {groups.map((group) => (
+          <div
+            key={group.title}
+            style={{
+              background: "var(--card)",
+              padding: "24px 24px 20px",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "Syne, sans-serif",
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "#fff",
+                marginBottom: "14px",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {group.title}
+            </div>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {group.items.map((item) => (
+                <span
+                  key={item}
+                  style={{
+                    fontSize: "10px",
+                    letterSpacing: "0.06em",
+                    padding: "4px 10px",
+                    border: "1px solid var(--border)",
+                    color: "var(--dim)",
+                    borderRadius: "1px",
+                  }}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );
