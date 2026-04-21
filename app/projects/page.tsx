@@ -37,12 +37,67 @@ export default function ProjectsPage() {
   return (
     <main style={{ padding: "56px 32px" }}>
       <style>{`
-        .proj-row { background: var(--card); display: block; text-decoration: none; color: inherit; padding: 32px 28px; transition: background 0.2s; }
-        .proj-row:hover { background: var(--bg3); }
-        .proj-row:hover .proj-num { color: var(--accent); }
-        .proj-row:hover .proj-arrow { color: var(--accent); transform: translate(3px, -3px); }
-        .proj-arrow { color: var(--dim); font-size: 18px; transition: color 0.2s, transform 0.2s; display: inline-block; }
-        .proj-tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; background: rgba(74,240,184,0.06); border: 1px solid rgba(74,240,184,0.2); color: var(--accent); border-radius: 1px; }
+        .proj-row {
+          background: var(--card);
+          display: block;
+          text-decoration: none;
+          color: inherit;
+          padding: 36px 32px;
+          transition: background 0.2s;
+          border-left: 3px solid transparent;
+        }
+        .proj-row:hover {
+          background: var(--bg3);
+          border-left-color: var(--accent);
+        }
+        .proj-row:hover .proj-title {
+          color: #ffffff;
+        }
+        .proj-row:hover .proj-arrow {
+          color: var(--accent);
+          transform: translate(4px, -4px);
+        }
+        .proj-arrow {
+          color: var(--dim);
+          font-size: 22px;
+          transition: color 0.2s, transform 0.25s;
+          display: inline-block;
+          flex-shrink: 0;
+        }
+        .proj-title {
+          font-family: Syne, sans-serif;
+          font-size: clamp(22px, 3vw, 30px);
+          font-weight: 800;
+          color: #f0f4ff;
+          line-height: 1.15;
+          letter-spacing: -0.02em;
+          margin-bottom: 10px;
+          transition: color 0.2s;
+        }
+        .proj-tag {
+          font-size: 10px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          padding: 4px 12px;
+          background: rgba(74,240,184,0.06);
+          border: 1px solid rgba(74,240,184,0.2);
+          color: var(--accent);
+          border-radius: 1px;
+        }
+        .proj-num {
+          font-family: Syne, sans-serif;
+          font-size: 48px;
+          font-weight: 800;
+          color: var(--border2);
+          line-height: 1;
+          letter-spacing: -0.04em;
+          flex-shrink: 0;
+          user-select: none;
+          transition: color 0.2s;
+        }
+        .proj-row:hover .proj-num {
+          color: rgba(74,240,184,0.25);
+        }
       `}</style>
 
       {/* Page header */}
@@ -77,28 +132,44 @@ export default function ProjectsPage() {
       <div style={{ display: "grid", gap: "1px", background: "var(--border)" }}>
         {projects.map((project) => (
           <Link key={project.num} href={project.href} className="proj-row">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                <span className="proj-num" style={{ fontFamily: "DM Mono, monospace", fontSize: "11px", color: "var(--dim)", letterSpacing: "0.1em", transition: "color 0.2s" }}>
-                  {project.num}
-                </span>
-                <span style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--dim)", padding: "3px 8px", border: "1px solid var(--border)", borderRadius: "1px" }}>
+
+            {/* Top row: large number + arrow */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+                <span className="proj-num">{project.num}</span>
+                <span style={{
+                  fontSize: "10px",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--accent)",
+                  padding: "4px 10px",
+                  border: "1px solid rgba(74,240,184,0.3)",
+                  borderRadius: "1px",
+                  background: "rgba(74,240,184,0.05)",
+                  alignSelf: "center",
+                }}>
                   {project.category}
                 </span>
               </div>
               <span className="proj-arrow">↗</span>
             </div>
 
-            <h2 style={{ fontFamily: "Syne, sans-serif", fontSize: "20px", fontWeight: 700, color: "#fff", marginBottom: "10px", lineHeight: 1.2 }}>
-              {project.title}
-            </h2>
+            {/* Big title */}
+            <h2 className="proj-title">{project.title}</h2>
 
             {/* Highlight callout */}
-            <div style={{ fontSize: "12px", color: "var(--accent)", marginBottom: "12px", fontFamily: "DM Mono, monospace", letterSpacing: "0.02em" }}>
+            <div style={{
+              fontSize: "12px",
+              color: "var(--accent)",
+              marginBottom: "14px",
+              fontFamily: "DM Mono, monospace",
+              letterSpacing: "0.02em",
+              paddingLeft: "2px",
+            }}>
               → {project.highlight}
             </div>
 
-            <p style={{ fontSize: "13px", color: "var(--muted)", lineHeight: 1.75, marginBottom: "20px", maxWidth: "640px" }}>
+            <p style={{ fontSize: "13px", color: "var(--muted)", lineHeight: 1.75, marginBottom: "22px", maxWidth: "640px" }}>
               {project.description}
             </p>
 
