@@ -31,73 +31,29 @@ const projects = [
     href: "/projects/cicd-pipeline",
     highlight: "No long-lived AWS credentials. Two deploy paths. One pipeline.",
   },
+  {
+    num: "04",
+    category: "AWS Native CI/CD",
+    title: "React App Deployment with AWS CodePipeline",
+    description:
+      "Full CI/CD pipeline using AWS CodePipeline, CodeBuild, and S3 to automatically build and deploy a React application on every GitHub push. Pipeline lives entirely inside AWS — no GitHub Actions required.",
+    tags: ["AWS CodePipeline", "AWS CodeBuild", "S3", "React", "buildspec.yml"],
+    href: "/projects/codepipeline-react-s3",
+    highlight: "GitHub push → CodePipeline → CodeBuild → S3. Fully automated.",
+  },
 ];
 
 export default function ProjectsPage() {
   return (
     <main style={{ padding: "56px 32px" }}>
       <style>{`
-        .proj-row {
-          background: var(--card);
-          display: block;
-          text-decoration: none;
-          color: inherit;
-          padding: 36px 32px;
-          transition: background 0.2s;
-          border-left: 3px solid transparent;
-        }
-        .proj-row:hover {
-          background: var(--bg3);
-          border-left-color: var(--accent);
-        }
-        .proj-row:hover .proj-title {
-          color: #ffffff;
-        }
-        .proj-row:hover .proj-arrow {
-          color: var(--accent);
-          transform: translate(4px, -4px);
-        }
-        .proj-arrow {
-          color: var(--dim);
-          font-size: 22px;
-          transition: color 0.2s, transform 0.25s;
-          display: inline-block;
-          flex-shrink: 0;
-        }
-        .proj-title {
-          font-family: Syne, sans-serif;
-          font-size: clamp(22px, 3vw, 30px);
-          font-weight: 800;
-          color: #f0f4ff;
-          line-height: 1.15;
-          letter-spacing: -0.02em;
-          margin-bottom: 10px;
-          transition: color 0.2s;
-        }
-        .proj-tag {
-          font-size: 10px;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          padding: 4px 12px;
-          background: rgba(74,240,184,0.06);
-          border: 1px solid rgba(74,240,184,0.2);
-          color: var(--accent);
-          border-radius: 1px;
-        }
-        .proj-num {
-          font-family: Syne, sans-serif;
-          font-size: 48px;
-          font-weight: 800;
-          color: var(--border2);
-          line-height: 1;
-          letter-spacing: -0.04em;
-          flex-shrink: 0;
-          user-select: none;
-          transition: color 0.2s;
-        }
-        .proj-row:hover .proj-num {
-          color: rgba(74,240,184,0.25);
-        }
+        .proj-row { background: var(--card); display: block; text-decoration: none; color: inherit; padding: 36px 32px; transition: background 0.2s; border-left: 3px solid transparent; }
+        .proj-row:hover { background: var(--bg3); border-left-color: var(--accent); }
+        .proj-row:hover .proj-title { color: #ffffff; }
+        .proj-row:hover .proj-arrow { color: var(--accent); transform: translate(4px, -4px); }
+        .proj-arrow { color: var(--dim); font-size: 22px; transition: color 0.2s, transform 0.25s; display: inline-block; flex-shrink: 0; }
+        .proj-title { font-family: Syne, sans-serif; font-size: clamp(22px, 3vw, 30px); font-weight: 800; color: #f0f4ff; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 10px; transition: color 0.2s; }
+        .proj-tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 12px; background: rgba(74,240,184,0.06); border: 1px solid rgba(74,240,184,0.2); color: var(--accent); border-radius: 1px; }
       `}</style>
 
       {/* Page header */}
@@ -109,16 +65,17 @@ export default function ProjectsPage() {
         <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "16px" }}>
           Projects
         </h1>
-        <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.75, maxWidth: "560px" }}>
-          Three interconnected projects that together form one cloud-native delivery platform. Each is documented as a full engineering case study — architecture, trade-offs, decisions, and lessons learned.
+        <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.75, maxWidth: "580px" }}>
+          Four interconnected projects spanning cloud infrastructure, container orchestration, CI/CD automation, and AWS-native delivery pipelines. Each documented as a full engineering case study.
         </p>
       </div>
 
       {/* Stats row */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "var(--border)", marginBottom: "48px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px", background: "var(--border)", marginBottom: "48px" }}>
         {[
-          { value: "3", label: "Projects" },
+          { value: "4", label: "Projects" },
           { value: "2", label: "Deployment tracks" },
+          { value: "2", label: "CI/CD approaches" },
           { value: "0", label: "Stored AWS credentials" },
         ].map(({ value, label }) => (
           <div key={label} style={{ background: "var(--card)", padding: "20px 24px" }}>
@@ -132,40 +89,21 @@ export default function ProjectsPage() {
       <div style={{ display: "grid", gap: "1px", background: "var(--border)" }}>
         {projects.map((project) => (
           <Link key={project.num} href={project.href} className="proj-row">
-
-            {/* Top row: large number + arrow */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                <span className="proj-num">{project.num}</span>
-                <span style={{
-                  fontSize: "10px",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--accent)",
-                  padding: "4px 10px",
-                  border: "1px solid rgba(74,240,184,0.3)",
-                  borderRadius: "1px",
-                  background: "rgba(74,240,184,0.05)",
-                  alignSelf: "center",
-                }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <span style={{ fontFamily: "Syne, sans-serif", fontSize: "48px", fontWeight: 800, color: "var(--border2)", lineHeight: 1, letterSpacing: "-0.04em", userSelect: "none" }}>
+                  {project.num}
+                </span>
+                <span style={{ fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)", padding: "4px 10px", border: "1px solid rgba(74,240,184,0.3)", borderRadius: "1px", background: "rgba(74,240,184,0.05)", alignSelf: "center" }}>
                   {project.category}
                 </span>
               </div>
               <span className="proj-arrow">↗</span>
             </div>
 
-            {/* Big title */}
             <h2 className="proj-title">{project.title}</h2>
 
-            {/* Highlight callout */}
-            <div style={{
-              fontSize: "12px",
-              color: "var(--accent)",
-              marginBottom: "14px",
-              fontFamily: "DM Mono, monospace",
-              letterSpacing: "0.02em",
-              paddingLeft: "2px",
-            }}>
+            <div style={{ fontSize: "12px", color: "var(--accent)", marginBottom: "14px", fontFamily: "DM Mono, monospace", letterSpacing: "0.02em" }}>
               → {project.highlight}
             </div>
 
@@ -185,7 +123,7 @@ export default function ProjectsPage() {
       {/* Bottom note */}
       <div style={{ marginTop: "40px", padding: "20px 24px", background: "var(--card)", border: "1px solid var(--border)", borderLeft: "2px solid var(--accent)" }}>
         <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.75 }}>
-          All three projects share a single GitHub repository and are deployed through the same CI/CD pipeline. The infrastructure is fully provisioned with Terraform — reproducible from scratch in minutes.
+          Projects 01–03 share a single repository and CI/CD pipeline. Project 04 demonstrates the AWS-native alternative — CodePipeline + CodeBuild — showing two distinct approaches to the same delivery problem.
         </p>
       </div>
     </main>
