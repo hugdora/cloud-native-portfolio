@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-export default function S3CloudFrontArticle() {
+export default function KubernetesSecondTrackArticle() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "720px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "720px", margin: "0 auto" }}>
       <style>{`
         .back-link { color: var(--dim); text-decoration: none; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
         .back-link:hover { color: var(--accent); }
@@ -11,7 +11,11 @@ export default function S3CloudFrontArticle() {
         .article-body strong { color: var(--text); font-weight: 500; }
         .callout { background: var(--card); border: 1px solid var(--border); border-left: 2px solid var(--accent); padding: 16px 20px; margin: 24px 0; font-size: 13px; color: var(--muted); line-height: 1.75; }
         .callout strong { color: var(--accent); display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
-        .code-block { background: var(--card); border: 1px solid var(--border); padding: 16px 20px; font-family: DM Mono, monospace; font-size: 12px; color: var(--muted); line-height: 1.8; margin: 20px 0; overflow-x: auto; white-space: pre; }
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin: 24px 0; }
+        .compare-cell { background: var(--card); padding: 16px 18px; }
+        .compare-head { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; }
+        .compare-item { font-size: 12px; color: var(--muted); line-height: 1.7; padding: 4px 0; border-bottom: 1px solid var(--border); }
+        .compare-item:last-child { border-bottom: none; }
         .tag { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border: 1px solid var(--border); color: var(--dim); border-radius: 1px; margin-right: 6px; }
         .divider { height: 1px; background: var(--border); margin: 48px 0; }
       `}</style>
@@ -20,118 +24,105 @@ export default function S3CloudFrontArticle() {
         <Link href="/writing" className="back-link">← Writing</Link>
       </div>
 
-      {/* Header */}
       <div style={{ fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent)", marginBottom: "16px" }}>
-        01 / Architecture
+        02 / Architecture
       </div>
       <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "20px" }}>
-        Why I used S3 + CloudFront over traditional hosting
+        Why Kubernetes is a second deployment track, not the primary one
       </h1>
       <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "48px" }}>
-        <span style={{ fontSize: "12px", color: "var(--dim)" }}>5 min read</span>
+        <span style={{ fontSize: "12px", color: "var(--dim)" }}>6 min read</span>
         <span style={{ width: "1px", height: "14px", background: "var(--border)" }} />
-        {["AWS", "CloudFront", "S3", "Architecture"].map(t => <span key={t} className="tag">{t}</span>)}
+        {["Kubernetes", "Architecture", "Decision-making"].map(t => <span key={t} className="tag">{t}</span>)}
       </div>
 
       <div className="article-body">
         <p>
-          When I started building this portfolio, the obvious choice was to spin up a server — a small EC2 instance, maybe a Lightsail VPS, something running nginx. It is the path most people take because it is familiar. You deploy a file, nginx serves it, done.
+          Kubernetes is one of the most impressive pieces of infrastructure software ever built. It solves genuinely hard problems — container scheduling, self-healing, rolling deployments, service discovery, horizontal scaling — at a level of sophistication that took years to develop.
         </p>
         <p>
-          I chose not to do that. Here is why.
+          It is also completely unnecessary for serving a static portfolio website. And I think that distinction is worth writing about, because the instinct in the DevOps world is often to reach for the most powerful tool available rather than the most appropriate one.
         </p>
 
-        <h2>The problem with running a server for a static site</h2>
+        <h2>What Kubernetes actually costs</h2>
         <p>
-          A static website — one that consists entirely of HTML, CSS, JavaScript, and assets — does not need a server. It needs storage and delivery. A web server adds a layer between those two things that solves a problem you do not have.
+          When people say Kubernetes is complex, they usually mean the learning curve. That is real but finite. The deeper cost is operational: Kubernetes requires ongoing attention in a way that S3 + CloudFront simply does not.
         </p>
         <p>
-          More specifically, running a server for a static site means you are now responsible for: keeping the operating system patched, managing the process that serves files, handling SSL certificate renewal, scaling when traffic spikes, and paying for compute time even when no one is visiting. None of those problems are interesting. None of them make the site faster or more reliable. They are just overhead.
+          With Kubernetes, you are responsible for: the control plane (unless managed), node health and capacity, networking (CNI plugins, Ingress controllers), certificate management, pod disruption budgets, resource requests and limits, RBAC, and the upgrade path for both the cluster and every component running on it. None of that work disappears just because you chose a managed service like EKS.
         </p>
 
         <div className="callout">
-          <strong>The core insight</strong>
-          A static site has no dynamic logic. There is nothing to compute. The correct infrastructure is one that stores files and delivers them — nothing more.
+          <strong>The honest question</strong>
+          For any infrastructure decision, ask: what problem does this solve that simpler alternatives cannot? If you cannot answer clearly, the simpler alternative is probably correct.
         </div>
 
-        <h2>Why S3</h2>
+        <h2>What S3 + CloudFront costs instead</h2>
         <p>
-          S3 is object storage. It stores files and returns them on request. That is exactly what a static site needs. It is also highly durable (eleven nines), globally available, and essentially free at portfolio scale — you pay fractions of a cent per GB per month and fractions of a cent per request.
+          S3 + CloudFront requires essentially zero ongoing operational work for a static site. There are no nodes to patch, no pods to monitor, no control plane to upgrade. The infrastructure provisions once via Terraform and then runs without intervention.
         </p>
         <p>
-          Critically, I keep the S3 bucket <strong>completely private</strong>. Public S3 buckets are a common pattern for static hosting, but they expose the origin URL directly. Anyone can hit the bucket endpoint, bypass CloudFront, skip your cache, and access objects without going through any of your security controls. Private bucket, CloudFront in front, OAC to authenticate — that is the production pattern.
-        </p>
-
-        <div className="code-block">{`# What the bucket policy looks like
-{
-  "Effect": "Allow",
-  "Principal": {
-    "Service": "cloudfront.amazonaws.com"
-  },
-  "Action": "s3:GetObject",
-  "Resource": "arn:aws:s3:::your-bucket/*",
-  "Condition": {
-    "StringEquals": {
-      "AWS:SourceArn": "arn:aws:cloudfront::ACCOUNT:distribution/ID"
-    }
-  }
-}`}</div>
-
-        <p>
-          Only the specific CloudFront distribution can read from the bucket. Not the public internet. Not other AWS accounts. Not even other distributions in the same account.
+          The tradeoff is capability. S3 + CloudFront cannot run server-side logic, cannot manage stateful workloads, cannot do anything a server does. But a static site does not need any of those things, so the tradeoff costs nothing.
         </p>
 
-        <h2>Why CloudFront</h2>
+        <div className="compare-grid">
+          <div className="compare-cell">
+            <div className="compare-head" style={{ color: "var(--accent)" }}>S3 + CloudFront</div>
+            <div className="compare-item">Zero ongoing ops work</div>
+            <div className="compare-item">Sub-millisecond global delivery</div>
+            <div className="compare-item">Free tier covers portfolio scale</div>
+            <div className="compare-item">No servers, no patches, no restarts</div>
+            <div className="compare-item">Scales to millions of requests automatically</div>
+          </div>
+          <div className="compare-cell">
+            <div className="compare-head" style={{ color: "#3a7fff" }}>Kubernetes</div>
+            <div className="compare-item">Ongoing node and cluster maintenance</div>
+            <div className="compare-item">Full container lifecycle management</div>
+            <div className="compare-item">Significant compute cost at any scale</div>
+            <div className="compare-item">Horizontal scaling, self-healing pods</div>
+            <div className="compare-item">Required for stateful or dynamic workloads</div>
+          </div>
+        </div>
+
+        <h2>Why Kubernetes is still in this platform</h2>
         <p>
-          CloudFront is a Content Delivery Network. It has edge locations in over 400 cities worldwide. When someone in Tokyo visits your site, they do not wait for a round trip to your S3 bucket in eu-west-2 — they get the cached response from the Tokyo edge location in milliseconds.
+          The Kubernetes deployment track exists for a different reason: demonstration. The skills required to design and operate a Kubernetes delivery pipeline — Deployments, Services, Ingress, health probes, Helm packaging, rolling updates — are directly relevant to production workloads at scale. A portfolio that only shows S3 + CloudFront leaves that entire skill set invisible.
         </p>
         <p>
-          CloudFront also handles HTTPS termination via ACM certificates, enforces redirect-to-HTTPS on all viewer connections, and gives you a place to attach CloudFront Functions for URL rewriting without ever touching the origin.
-        </p>
-        <p>
-          The free tier covers 1TB of data transfer and 10 million HTTP requests per month. For a portfolio site, the bill is effectively zero.
+          By running Kubernetes as a parallel track, the platform demonstrates both: the correct tool for the static hosting problem, and the ability to operate container orchestration when the problem actually requires it.
         </p>
 
-        <h2>The one problem I did not expect</h2>
+        <div className="callout">
+          <strong>The design decision</strong>
+          The Kubernetes track is not over-engineering. It is intentional demonstration of a skill set that would be the primary delivery mechanism in a production microservices environment.
+        </div>
+
+        <h2>When Kubernetes is the right choice</h2>
         <p>
-          Next.js static export generates files like <strong>/projects/index.html</strong>. When a user navigates directly to <strong>/projects/</strong>, CloudFront requests that path from S3. S3 looks for an object called <strong>projects/</strong> — which does not exist — and returns 403 AccessDenied.
+          Kubernetes becomes appropriate when you have workloads that need dynamic scaling, when you are running multiple services that need to communicate with each other, when you need fine-grained resource allocation across a shared compute pool, or when you need zero-downtime deployments for stateful applications.
         </p>
         <p>
-          The fix is a CloudFront Function that runs on every viewer request and rewrites the URL before it reaches S3:
-        </p>
-
-        <div className="code-block">{`function handler(event) {
-  var request = event.request;
-  var uri = request.uri;
-
-  if (uri.endsWith("/")) {
-    request.uri = uri + "index.html";
-  } else if (!uri.includes(".")) {
-    request.uri = uri + "/index.html";
-  }
-
-  return request;
-}`}</div>
-
-        <p>
-          This runs at the edge, adds no perceptible latency, and costs a fraction of what Lambda@Edge would. The function must be published before it can be attached to a behaviour — creating it is not enough. That cost me an hour.
-        </p>
-
-        <h2>What I would do differently</h2>
-        <p>
-          Nothing significant. The S3 + CloudFront pattern is the correct one for static delivery. If I were building a site with server-side rendering or API routes, I would use a different approach — but for a static export, this is the right architecture.
+          In other words: microservices, APIs, background workers, databases, event-driven systems. Not static websites.
         </p>
         <p>
-          The one thing I would add next is a WAF rule to rate-limit requests at the CloudFront layer. It is not necessary for a portfolio site, but it is a good habit and costs very little.
+          The most common mistake I see is organisations running Kubernetes for workloads that would be better served by a managed platform — App Runner, Fargate, Cloud Run, or even a simple S3 + CloudFront setup. The operational cost of Kubernetes is justified when the problem demands its capabilities. When it does not, you are paying complexity tax for no return.
+        </p>
+
+        <h2>The takeaway</h2>
+        <p>
+          Choosing the right tool is a more valuable skill than knowing many tools. The decision to use S3 + CloudFront as the primary path is not a concession — it is the technically correct answer to the problem. The decision to include Kubernetes is also correct, for a different reason entirely.
+        </p>
+        <p>
+          Good platform engineering is not about using every capability available. It is about matching capability to requirement, and being able to articulate why.
         </p>
 
         <div className="divider" />
 
         <p style={{ fontSize: "13px", color: "var(--dim)" }}>
-          The Terraform that provisions this entire stack — S3, CloudFront, OAC, ACM, Route 53 — is in the{" "}
-          <a href="https://github.com/hugdora/cloud-native-portfolio" target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", textDecoration: "none" }}>repository</a>.
-          The full case study is on the{" "}
-          <Link href="/projects/cloud-platform" style={{ color: "var(--accent)", textDecoration: "none" }}>Cloud Platform project page</Link>.
+          The full Kubernetes implementation is documented on the{" "}
+          <Link href="/projects/kubernetes-platform" style={{ color: "var(--accent)", textDecoration: "none" }}>Kubernetes Platform project page</Link>.
+          The CI/CD pipeline that runs both tracks is on the{" "}
+          <Link href="/projects/cicd-pipeline" style={{ color: "var(--accent)", textDecoration: "none" }}>CI/CD Pipeline page</Link>.
         </p>
       </div>
     </main>

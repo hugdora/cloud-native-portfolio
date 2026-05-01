@@ -46,7 +46,7 @@ export default function ContactPage() {
   }
 
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "760px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "760px", margin: "0 auto" }}>
       <style>{`
         .channel-card {
           background: var(--card);

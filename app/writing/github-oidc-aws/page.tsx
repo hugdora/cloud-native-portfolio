@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function GitHubOIDCArticle() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "720px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "720px", margin: "0 auto" }}>
       <style>{`
         .back-link { color: var(--dim); text-decoration: none; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
         .back-link:hover { color: var(--accent); }

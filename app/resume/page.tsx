@@ -4,7 +4,7 @@ const experience = [
   {
     title: "Cloud-Native Portfolio Platform (Self-Directed)",
     company: "Independent Project",
-    period: "Mar 2025 — Present",
+    period: "Mar 2026 — Present",
     type: "Self-directed",
     bullets: [
       "Designed and deployed a production-grade cloud-native platform on AWS — live at doraejangue.com.",
@@ -15,10 +15,10 @@ const experience = [
     ],
   },
   {
-    title: "Cybersecurity Consultant (Intern)",
+    title: "Cybersecurity Consultant",
     company: "Hagital",
-    period: "Mar 2024 — Feb 2025",
-    type: "Internship",
+    period: "Mar 2023 — Feb 2026",
+    type: "Contract",
     bullets: [
       "Deployed and optimised SIEM and EDR tooling to enhance monitoring and incident detection.",
       "Designed custom detection logic for brute-force, ransomware, and data exfiltration scenarios mapped to MITRE ATT&CK.",
@@ -117,7 +117,7 @@ const metrics = [
 
 export default function ResumePage() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "860px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "860px", margin: "0 auto" }}>
       <style>{`
         .section-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
         .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); max-width: 200px; }
@@ -129,24 +129,24 @@ export default function ResumePage() {
         .job-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
         .job-company { font-size: 13px; color: var(--accent); font-weight: 500; }
         .job-period { font-size: 11px; color: var(--dim); font-family: DM Mono, monospace; }
-        .job-type { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--border); color: var(--dim); border-radius: 1px; }
+        .job-type { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--border); color: var(--muted); border-color: var(--border2); border-radius: 1px; }
         .job-bullets { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
         .job-bullet { display: flex; gap: 12px; font-size: 13px; color: var(--muted); line-height: 1.7; }
         .job-bullet::before { content: '—'; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
         .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
         .cert-card { background: var(--card); padding: 16px 20px; }
         .cert-name { font-size: 13px; font-weight: 500; color: #fff; margin-bottom: 4px; }
-        .cert-issuer { font-size: 11px; color: var(--dim); letter-spacing: 0.04em; }
+        .cert-issuer { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
         .edu-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--border); gap: 16px; flex-wrap: wrap; }
         .edu-item:last-child { border-bottom: none; }
         .edu-degree { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
         .edu-school { font-size: 12px; color: var(--accent); }
-        .edu-period { font-size: 11px; color: var(--dim); font-family: DM Mono, monospace; white-space: nowrap; }
+        .edu-period { font-size: 11px; color: var(--muted); font-family: DM Mono, monospace; white-space: nowrap; }
         .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
         .skill-group { background: var(--card); padding: 20px 22px; }
         .skill-title { font-family: Syne, sans-serif; font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 12px; letter-spacing: 0.02em; }
         .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-        .skill-tag { font-size: 10px; letter-spacing: 0.04em; padding: 3px 10px; border: 1px solid var(--border); color: var(--dim); border-radius: 1px; }
+        .skill-tag { font-size: 10px; letter-spacing: 0.04em; padding: 3px 10px; border: 1px solid var(--border); color: var(--muted); border-color: var(--border2); border-radius: 1px; }
         .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); margin-bottom: 48px; }
         .metric-card { background: var(--card); padding: 20px 18px; }
         .metric-value { font-family: Syne, sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 6px; }

@@ -27,7 +27,7 @@ const decisions = [
 
 export default function CICDPipelinePage() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "820px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "820px", margin: "0 auto" }}>
       <style>{`
         .decision-card { background: var(--card); border: 1px solid var(--border); padding: 20px 24px; margin-bottom: 1px; }
         .decision-card:hover { border-color: var(--border2); }

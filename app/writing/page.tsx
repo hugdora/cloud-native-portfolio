@@ -37,7 +37,7 @@ const posts = [
 
 export default function WritingPage() {
   return (
-    <main style={{ padding: "56px 32px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "900px", margin: "0 auto" }}>
       <style>{`
         .article-row { background: var(--card); display: block; text-decoration: none; color: inherit; padding: 28px 28px 24px; transition: background 0.2s; border-left: 3px solid transparent; }
         .article-row:hover { background: var(--bg3); border-left-color: var(--accent); }

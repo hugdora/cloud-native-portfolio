@@ -31,15 +31,15 @@ const decisions = [
 
 export default function KubernetesPlatformPage() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "820px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "820px", margin: "0 auto" }}>
       <style>{`
         .decision-card { background: var(--card); border: 1px solid var(--border); padding: 20px 24px; margin-bottom: 1px; }
         .decision-card:hover { border-color: var(--border2); }
         .back-link { color: var(--dim); text-decoration: none; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
         .back-link:hover { color: var(--accent); }
-        .proof-img { width: 100%; border: 1px solid var(--border); border-radius: 2px; display: block; margin-top: 12px; }
-        .proof-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
-        .proof-caption { font-size: 11px; color: var(--dim); margin-top: 6px; line-height: 1.5; }
+        .proof-img { width: 100%; border: 2px solid var(--border2); border-radius: 4px; display: block; margin-top: 12px; min-height: 120px; object-fit: cover; }
+        .proof-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
+        .proof-caption { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.65; }
       `}</style>
 
       {/* Back */}
@@ -170,7 +170,7 @@ export default function KubernetesPlatformPage() {
           <span style={{ flex: 1, height: "1px", background: "var(--border)", maxWidth: "200px" }} />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
           {[
             {
               label: "Both pods running — 1/1 Ready",
@@ -193,7 +193,7 @@ export default function KubernetesPlatformPage() {
               img: "/projects/kubernetes-platform/helm-list.png"
             },
           ].map(({ label, caption, img }) => (
-            <div key={label} style={{ background: "var(--card)", border: "1px solid var(--border)", padding: "16px" }}>
+            <div key={label} style={{ background: "var(--bg2)", border: "1px solid var(--border2)", padding: "20px", borderRadius: "4px" }}>
               <div className="proof-label">{label}</div>
               <img src={img} alt={label} className="proof-img" />
               <p className="proof-caption">{caption}</p>
@@ -202,7 +202,7 @@ export default function KubernetesPlatformPage() {
         </div>
 
         {/* Full width curl response */}
-        <div style={{ marginTop: "16px", background: "var(--card)", border: "1px solid var(--border)", padding: "16px" }}>
+        <div style={{ marginTop: "16px", background: "var(--bg2)", border: "1px solid var(--border2)", padding: "20px", borderRadius: "4px" }}>
           <div className="proof-label">Live HTTP 200 response from node-app.local</div>
           <img src="/projects/kubernetes-platform/curl-response.png" alt="curl response" className="proof-img" />
           <p className="proof-caption">

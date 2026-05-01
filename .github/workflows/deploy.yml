@@ -1,0 +1,95 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # Required for IAM OIDC authentication
+  contents: read
+
+jobs:
+  # ─── Job 1: CI ────────────────────────────────────────────────────────────
+  ci:
+    name: CI — Lint, Type-check, Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Type check
+        run: npx tsc --noEmit --skipLibCheck
+
+      - name: Build
+        run: npm run build
+
+      # Upload the build output so the deploy job can use it
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: out
+          path: out/
+          retention-days: 1
+
+  # ─── Job 2: Deploy ────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy — S3 + CloudFront
+    runs-on: ubuntu-latest
+    needs: ci   # Only runs if CI passes
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: out
+          path: out/
+
+      - name: Configure AWS credentials via IAM OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html" \
+            --exclude "*.txt"
+
+          # HTML files — no cache (always fresh)
+          aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} \
+            --delete \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --include "*.html" \
+            --include "*.txt"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployed successfully to https://doraejangue.com"
+          echo "Bucket: ${{ secrets.S3_BUCKET_NAME }}"
+          echo "Distribution: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}"

@@ -45,7 +45,7 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <main style={{ padding: "56px 32px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "900px", margin: "0 auto" }}>
       <style>{`
         .proj-row { background: var(--card); display: block; text-decoration: none; color: inherit; padding: 36px 32px; transition: background 0.2s; border-left: 3px solid transparent; }
         .proj-row:hover { background: var(--bg3); border-left-color: var(--accent); }

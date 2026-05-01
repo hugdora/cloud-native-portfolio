@@ -92,7 +92,7 @@ const twoTracks = [
 
 export default function ArchitecturePage() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "860px" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "860px", margin: "0 auto" }}>
       <style>{`
         .arch-section { margin-bottom: 64px; }
         .section-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
