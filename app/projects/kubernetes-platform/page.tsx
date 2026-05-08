@@ -1,45 +1,46 @@
 import Link from "next/link";
 
 const stack = [
-  "Kubernetes", "Docker", "Helm", "NGINX Ingress",
-  "Node.js", "Express", "ConfigMap", "minikube",
-  "Liveness Probes", "Readiness Probes", "Startup Probes",
+  "AWS EKS", "AWS EC2 (t3.small)", "AWS VPC", "Terraform",
+  "Docker", "Helm", "NGINX Ingress", "Kubernetes",
+  "GitHub Actions", "IAM OIDC", "DockerHub", "Elastic Load Balancer",
 ];
 
 const decisions = [
   {
-    title: "Why Kubernetes as a second delivery track, not the primary",
-    body: "For a static portfolio site, Kubernetes adds real operational cost with no benefit over S3 + CloudFront. The primary path stays simple and efficient. The Kubernetes track exists to demonstrate orchestration skills — container lifecycle management, health probing, rolling updates, Helm packaging — that are directly relevant to production workloads at scale. It is a deliberate engineering decision, not over-engineering.",
+    title: "Why EKS over minikube for this implementation",
+    body: "minikube runs a single-node cluster locally — useful for learning but not representative of production. EKS provisions real EC2 worker nodes inside a VPC, with a managed control plane, IAM integration, and an Elastic Load Balancer for ingress. Every component in this implementation maps directly to what you would run in a production environment.",
+  },
+  {
+    title: "Why Terraform for the entire infrastructure stack",
+    body: "The VPC, subnets, NAT Gateway, Internet Gateway, EKS cluster, node group, IAM roles, and OIDC provider are all provisioned by Terraform. This means the entire cluster can be created in one command (terraform apply) and destroyed in one command (terraform destroy) — reproducible, version-controlled, and zero manual console setup.",
   },
   {
     title: "Why three separate health probe endpoints",
-    body: "Using the same endpoint for both readiness and liveness is one of the most common Kubernetes mistakes. A slow-starting app should fail readiness (removed from the Service) — not liveness (restarted). A deadlocked app should fail liveness — not readiness. Separate /ready and /live endpoints give Kubernetes precise control over each decision. The startup probe disables the liveness check entirely until the app is confirmed alive, preventing crash loops during startup.",
+    body: "The NGINX container serves /ready and /live as separate lightweight endpoints returning JSON. Readiness controls whether the pod receives traffic. Liveness controls whether the container is restarted. The startup probe disables liveness during container startup, preventing crash loops on slow-starting containers.",
   },
   {
-    title: "Why maxUnavailable: 0 in the rolling update strategy",
-    body: "With maxUnavailable: 0 and maxSurge: 1, Kubernetes must spin up a new pod and wait for it to pass its readiness probe before terminating any old pod. This guarantees zero-downtime deployments — capacity never drops below the desired replica count during a rollout. The trade-off is slightly more resource usage during the update window, which is acceptable.",
+    title: "Why IAM OIDC for GitHub Actions instead of stored credentials",
+    body: "The Terraform stack provisions an IAM OIDC provider and a scoped IAM role. GitHub Actions assumes this role via short-lived tokens — no AWS access keys are stored anywhere in the repository. The trust policy is locked to the specific repo and branch.",
   },
   {
-    title: "Why Helm over raw kubectl apply",
-    body: "Raw manifests work for a single environment, but they don't scale to dev/staging/prod. Helm templates allow the same manifests to deploy across environments with different values files — no duplication. A single helm upgrade --install command handles both first-time installs and updates, and Helm tracks revision history enabling one-command rollbacks.",
-  },
-  {
-    title: "Why resource requests and limits on every container",
-    body: "Without resource constraints, the Kubernetes scheduler cannot make informed placement decisions, and a runaway container can starve other workloads on the same node. Requests define the minimum guaranteed resources; limits cap the maximum. Setting both is a production requirement, not an optimisation.",
+    title: "Why Helm for packaging Kubernetes manifests",
+    body: "Raw kubectl manifests work for a single environment but don't scale. The Helm chart templates the Deployment, Service, and Ingress with configurable values — replica count, image tag, resource limits — so the same chart deploys across environments. helm upgrade --install handles both first-time installs and updates in a single command.",
   },
 ];
 
 export default function KubernetesPlatformPage() {
   return (
-    <main style={{ padding: "56px 32px", maxWidth: "820px", margin: "0 auto" }}>
+    <main style={{ padding: "56px 32px", maxWidth: "860px", margin: "0 auto" }}>
       <style>{`
         .decision-card { background: var(--card); border: 1px solid var(--border); padding: 20px 24px; margin-bottom: 1px; }
         .decision-card:hover { border-color: var(--border2); }
         .back-link { color: var(--dim); text-decoration: none; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
         .back-link:hover { color: var(--accent); }
-        .proof-img { width: 100%; border: 2px solid var(--border2); border-radius: 4px; display: block; margin-top: 12px; min-height: 120px; object-fit: cover; }
-        .proof-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
-        .proof-caption { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.65; }
+        .proof-img { width: 100%; border: 1px solid var(--border2); border-radius: 4px; display: block; margin-top: 12px; }
+        .proof-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; font-weight: 500; }
+        .proof-caption { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+        .proof-card { background: var(--bg2); border: 1px solid var(--border2); padding: 16px; border-radius: 4px; }
       `}</style>
 
       {/* Back */}
@@ -52,10 +53,10 @@ export default function KubernetesPlatformPage() {
         02 / Container Orchestration
       </div>
       <h1 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.1, marginBottom: "20px" }}>
-        Kubernetes Delivery Platform
+        Kubernetes Delivery Platform on AWS EKS
       </h1>
-      <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.75, marginBottom: "52px", maxWidth: "620px" }}>
-        A containerised Node.js/Express application delivery platform running on Kubernetes with Deployments, Services, NGINX Ingress, ConfigMaps, all three health probe types, and Helm packaging. Deployed on minikube demonstrating full container orchestration and lifecycle management.
+      <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.75, marginBottom: "52px", maxWidth: "640px" }}>
+        A production-grade container orchestration platform deployed on AWS EKS. Terraform provisions the full infrastructure stack — VPC, EKS cluster, EC2 worker nodes, IAM roles, and OIDC provider. A static portfolio app is containerised with Docker/NGINX, packaged with Helm, and deployed automatically via GitHub Actions with IAM OIDC. An AWS Elastic Load Balancer routes external traffic through NGINX Ingress to the pods.
       </p>
 
       {/* Architecture diagram */}
@@ -64,82 +65,83 @@ export default function KubernetesPlatformPage() {
           Architecture
           <span style={{ flex: 1, height: "1px", background: "var(--border)", maxWidth: "200px" }} />
         </div>
-
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", padding: "32px 24px", position: "relative", overflow: "hidden" }}>
           <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
-          <svg width="100%" viewBox="0 0 720 220" style={{ overflow: "visible", display: "block" }}>
+          <svg width="100%" viewBox="0 0 800 180" style={{ overflow: "visible", display: "block" }}>
             <defs>
-              <marker id="k8s-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <marker id="k-a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
                 <path d="M2 1L8 5L2 9" fill="none" stroke="#4af0b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </marker>
-              <marker id="k8s-arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                <path d="M2 1L8 5L2 9" fill="none" stroke="#5b8fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <marker id="k-a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                <path d="M2 1L8 5L2 9" fill="none" stroke="#2e4470" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </marker>
             </defs>
 
+            {/* GitHub push */}
+            <rect x="0" y="68" width="100" height="44" rx="4" fill="#080d1c" stroke="#2e4470" strokeWidth="1"/>
+            <text x="50" y="86" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace">git push</text>
+            <text x="50" y="101" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">main branch</text>
+
+            <line x1="100" y1="90" x2="125" y2="90" stroke="#4af0b8" strokeWidth="1.5" markerEnd="url(#k-a1)"/>
+
             {/* GitHub Actions */}
-            <rect x="10" y="88" width="110" height="44" rx="4" fill="#080d1c" stroke="#2e4470" strokeWidth="1"/>
-            <text x="65" y="107" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace" fontWeight="500">GitHub Actions</text>
-            <text x="65" y="121" textAnchor="middle" fill="#5a7299" fontSize="9" fontFamily="DM Mono, monospace">docker build + push</text>
+            <rect x="127" y="56" width="110" height="68" rx="4" fill="#080d1c" stroke="#4af0b8" strokeWidth="1.5"/>
+            <text x="182" y="76" textAnchor="middle" fill="#4af0b8" fontSize="10" fontFamily="DM Mono, monospace" fontWeight="500">GitHub Actions</text>
+            <text x="182" y="91" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">docker build + push</text>
+            <text x="182" y="104" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">IAM OIDC → EKS</text>
+            <text x="182" y="116" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">helm upgrade</text>
 
-            <line x1="120" y1="110" x2="148" y2="110" stroke="#4af0b8" strokeWidth="1.5" markerEnd="url(#k8s-arrow)"/>
+            <line x1="237" y1="90" x2="262" y2="90" stroke="#4af0b8" strokeWidth="1.5" markerEnd="url(#k-a1)"/>
 
-            {/* Registry */}
-            <rect x="150" y="88" width="100" height="44" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1"/>
-            <text x="200" y="107" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace">Registry</text>
-            <text x="200" y="121" textAnchor="middle" fill="#5a7299" fontSize="9" fontFamily="DM Mono, monospace">Docker image</text>
+            {/* AWS box */}
+            <rect x="264" y="20" width="530" height="150" rx="6" fill="transparent" stroke="#1e2d4a" strokeWidth="1" strokeDasharray="5 3"/>
+            <text x="282" y="38" fill="#5a7299" fontSize="9" fontFamily="DM Mono, monospace" letterSpacing="1">AWS eu-west-2 — VPC vpc-0aad5cf237cc566bc</text>
 
-            <line x1="250" y1="110" x2="278" y2="110" stroke="#4af0b8" strokeWidth="1.5" markerEnd="url(#k8s-arrow)"/>
+            {/* ELB */}
+            <rect x="280" y="50" width="100" height="40" rx="4" fill="#080d1c" stroke="#4af0b8" strokeWidth="1.5"/>
+            <text x="330" y="68" textAnchor="middle" fill="#4af0b8" fontSize="10" fontFamily="DM Mono, monospace" fontWeight="500">ELB</text>
+            <text x="330" y="82" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">Classic · Internet-facing</text>
 
-            {/* K8s cluster box */}
-            <rect x="280" y="20" width="430" height="180" rx="6" fill="transparent" stroke="#2e4470" strokeWidth="1" strokeDasharray="5 3"/>
-            <text x="298" y="38" fill="#5a7299" fontSize="9" fontFamily="DM Mono, monospace" letterSpacing="1">KUBERNETES CLUSTER (minikube)</text>
+            <line x1="380" y1="70" x2="406" y2="70" stroke="#4af0b8" strokeWidth="1.5" markerEnd="url(#k-a1)"/>
 
-            {/* Ingress */}
-            <rect x="295" y="50" width="120" height="44" rx="4" fill="#080d1c" stroke="#5b8fff" strokeWidth="1.5"/>
-            <text x="355" y="70" textAnchor="middle" fill="#5b8fff" fontSize="11" fontFamily="DM Mono, monospace" fontWeight="500">Ingress</text>
-            <text x="355" y="84" textAnchor="middle" fill="#5a7299" fontSize="9" fontFamily="DM Mono, monospace">NGINX · node-app.local</text>
+            {/* NGINX Ingress */}
+            <rect x="408" y="50" width="110" height="40" rx="4" fill="#080d1c" stroke="#2e4470" strokeWidth="1"/>
+            <text x="463" y="68" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace">NGINX Ingress</text>
+            <text x="463" y="82" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">portfoliod-ingress</text>
 
-            <line x1="415" y1="72" x2="448" y2="72" stroke="#5b8fff" strokeWidth="1.5" markerEnd="url(#k8s-arrow-blue)"/>
+            <line x1="518" y1="70" x2="544" y2="70" stroke="#4af0b8" strokeWidth="1.5" markerEnd="url(#k-a1)"/>
+
+            {/* EKS box */}
+            <rect x="546" y="40" width="238" height="120" rx="4" fill="transparent" stroke="#2e4470" strokeWidth="1" strokeDasharray="4 3"/>
+            <text x="562" y="57" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace" letterSpacing="1">EKS — portfoliod-cluster</text>
 
             {/* Service */}
-            <rect x="450" y="50" width="110" height="44" rx="4" fill="#080d1c" stroke="#2e4470" strokeWidth="1"/>
-            <text x="505" y="70" textAnchor="middle" fill="#eef2fc" fontSize="11" fontFamily="DM Mono, monospace">Service</text>
-            <text x="505" y="84" textAnchor="middle" fill="#5a7299" fontSize="9" fontFamily="DM Mono, monospace">ClusterIP :80</text>
+            <rect x="558" y="64" width="210" height="30" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1"/>
+            <text x="663" y="83" textAnchor="middle" fill="#eef2fc" fontSize="9" fontFamily="DM Mono, monospace">Service (ClusterIP)</text>
 
-            {/* Arrows to pods */}
-            <line x1="505" y1="94" x2="505" y2="118" stroke="#2e4470" strokeWidth="1" markerEnd="url(#k8s-arrow-blue)"/>
-            <line x1="505" y1="118" x2="450" y2="130" stroke="#2e4470" strokeWidth="1"/>
-            <line x1="505" y1="118" x2="560" y2="130" stroke="#2e4470" strokeWidth="1"/>
+            <line x1="663" y1="94" x2="633" y2="112" stroke="#2e4470" strokeWidth="1" markerEnd="url(#k-a2)"/>
+            <line x1="663" y1="94" x2="693" y2="112" stroke="#2e4470" strokeWidth="1" markerEnd="url(#k-a2)"/>
 
             {/* Pod 1 */}
-            <rect x="390" y="130" width="110" height="50" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1"/>
-            <text x="445" y="150" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace">Pod 1</text>
-            <text x="445" y="164" textAnchor="middle" fill="#4af0b8" fontSize="8" fontFamily="DM Mono, monospace">Ready ✓ Live ✓</text>
-            <text x="445" y="175" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">1/1 Running</text>
+            <rect x="558" y="113" width="90" height="34" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1"/>
+            <text x="603" y="128" textAnchor="middle" fill="#eef2fc" fontSize="9" fontFamily="DM Mono, monospace">Pod · Node 1</text>
+            <text x="603" y="140" textAnchor="middle" fill="#4af0b8" fontSize="8" fontFamily="DM Mono, monospace">t3.small · Ready ✓</text>
 
             {/* Pod 2 */}
-            <rect x="510" y="130" width="110" height="50" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1"/>
-            <text x="565" y="150" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace">Pod 2</text>
-            <text x="565" y="164" textAnchor="middle" fill="#4af0b8" fontSize="8" fontFamily="DM Mono, monospace">Ready ✓ Live ✓</text>
-            <text x="565" y="175" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">1/1 Running</text>
+            <rect x="676" y="113" width="90" height="34" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1"/>
+            <text x="721" y="128" textAnchor="middle" fill="#eef2fc" fontSize="9" fontFamily="DM Mono, monospace">Pod · Node 2</text>
+            <text x="721" y="140" textAnchor="middle" fill="#4af0b8" fontSize="8" fontFamily="DM Mono, monospace">t3.small · Ready ✓</text>
 
-            {/* ConfigMap */}
-            <rect x="650" y="88" width="52" height="36" rx="4" fill="#080d1c" stroke="#1e2d4a" strokeWidth="1" strokeDasharray="3 2"/>
-            <text x="676" y="103" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">Config</text>
-            <text x="676" y="115" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">Map</text>
-            <line x1="650" y1="106" x2="620" y2="155" stroke="#1e2d4a" strokeWidth="1" strokeDasharray="3 2"/>
+            {/* Terraform label */}
+            <rect x="280" y="116" width="210" height="20" rx="3" fill="transparent"/>
+            <text x="385" y="130" textAnchor="middle" fill="#3d4f6a" fontSize="8" fontFamily="DM Mono, monospace">Terraform — VPC · EKS · Node Group · IAM · OIDC</text>
 
             {/* User */}
-            <rect x="10" y="30" width="80" height="36" rx="4" fill="#0d1322" stroke="#1e2d4a" strokeWidth="1"/>
-            <text x="50" y="48" textAnchor="middle" fill="#eef2fc" fontSize="10" fontFamily="DM Mono, monospace">User</text>
-            <text x="50" y="61" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">Browser</text>
-            <line x1="90" y1="48" x2="200" y2="48" stroke="#2e4470" strokeWidth="1" strokeDasharray="4 3"/>
-            <line x1="200" y1="48" x2="200" y2="72" stroke="#2e4470" strokeWidth="1" strokeDasharray="4 3"/>
-            <line x1="200" y1="72" x2="293" y2="72" stroke="#2e4470" strokeWidth="1" markerEnd="url(#k8s-arrow-blue)" strokeDasharray="4 3"/>
-
-            {/* Helm label */}
-            <text x="355" y="210" textAnchor="middle" fill="#5a7299" fontSize="8" fontFamily="DM Mono, monospace">packaged with Helm · helm upgrade --install</text>
+            <rect x="0" y="20" width="70" height="30" rx="4" fill="#0d1322" stroke="#1e2d4a" strokeWidth="1"/>
+            <text x="35" y="39" textAnchor="middle" fill="#eef2fc" fontSize="9" fontFamily="DM Mono, monospace">Browser</text>
+            <line x1="70" y1="35" x2="200" y2="35" stroke="#2e4470" strokeWidth="1" strokeDasharray="3 3"/>
+            <line x1="200" y1="35" x2="200" y2="50" stroke="#2e4470" strokeWidth="1" strokeDasharray="3 3"/>
+            <line x1="200" y1="50" x2="280" y2="50" stroke="#2e4470" strokeWidth="1" markerEnd="url(#k-a2)" strokeDasharray="3 3"/>
           </svg>
         </div>
       </div>
@@ -149,11 +151,11 @@ export default function KubernetesPlatformPage() {
         {[
           {
             label: "Problem",
-            text: "Running a container on a server with no orchestration means no automatic restarts, no health checks, no rolling updates, and no horizontal scaling. A single crash takes the service down with no recovery."
+            text: "Running containers on a single server with no orchestration means no self-healing, no rolling updates, no load balancing, and no production-grade infrastructure. A crash takes the service down permanently."
           },
           {
             label: "Solution",
-            text: "Kubernetes manages the full container lifecycle — scheduling pods, restarting unhealthy containers, routing traffic via Services and Ingress, and enabling zero-downtime deployments via rolling updates with readiness-gated rollouts."
+            text: "AWS EKS manages the Kubernetes control plane. Terraform provisions the full VPC and cluster stack. Helm deploys the app. GitHub Actions automates every build and deployment with IAM OIDC — no stored AWS credentials."
           }
         ].map(({ label, text }) => (
           <div key={label} style={{ background: "var(--card)", padding: "24px" }}>
@@ -163,90 +165,94 @@ export default function KubernetesPlatformPage() {
         ))}
       </div>
 
-      {/* Proof of implementation */}
+      {/* Proof of implementation — real screenshots */}
       <div style={{ marginBottom: "52px" }}>
         <div style={{ fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent)", display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
           Proof of implementation
           <span style={{ flex: 1, height: "1px", background: "var(--border)", maxWidth: "200px" }} />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-          {[
-            {
-              label: "Both pods running — 1/1 Ready",
-              caption: "2 replicas, 0 restarts, STATUS = Running. Rolling update confirmed — new ReplicaSet hash visible.",
-              img: "/projects/kubernetes-platform/pods-v2.png"
-            },
-            {
-              label: "All 3 probes configured on running pod",
-              caption: "Liveness on /live (delay=30s), Readiness on /ready (delay=10s), Startup on /live (failureThreshold=6). Separate endpoints by design.",
-              img: "/projects/kubernetes-platform/pod-probes.png"
-            },
-            {
-              label: "Ingress routing to node-app.local",
-              caption: "NGINX Ingress class, ADDRESS = 192.168.49.2, port 80. node-app.local resolves via /etc/hosts.",
-              img: "/projects/kubernetes-platform/ingress.png"
-            },
-            {
-              label: "Helm release deployed — revision 2",
-              caption: "chart = kubernetes-app-0.1.0, STATUS = deployed. Revision 2 confirms a Helm upgrade was applied.",
-              img: "/projects/kubernetes-platform/helm-list.png"
-            },
-          ].map(({ label, caption, img }) => (
-            <div key={label} style={{ background: "var(--bg2)", border: "1px solid var(--border2)", padding: "20px", borderRadius: "4px" }}>
-              <div className="proof-label">{label}</div>
-              <img src={img} alt={label} className="proof-img" />
-              <p className="proof-caption">{caption}</p>
-            </div>
-          ))}
+        {/* GitHub Actions green */}
+        <div className="proof-card" style={{ marginBottom: "16px" }}>
+          <div className="proof-label">GitHub Actions — Build and Deploy to EKS ✅</div>
+          <img src="/projects/kubernetes-platform/github-actions-green.png" alt="GitHub Actions green" className="proof-img" />
+          <p className="proof-caption">
+            Both jobs green: Build and Push Docker Image (16s) → Deploy to EKS via Helm (1m 22s). Triggered by push to main. Status: Success. Total duration: 1m 57s.
+          </p>
         </div>
 
-        {/* Full width curl response */}
-        <div style={{ marginTop: "16px", background: "var(--bg2)", border: "1px solid var(--border2)", padding: "20px", borderRadius: "4px" }}>
-          <div className="proof-label">Live HTTP 200 response from node-app.local</div>
-          <img src="/projects/kubernetes-platform/curl-response.png" alt="curl response" className="proof-img" />
+        {/* Live app */}
+        <div className="proof-card" style={{ marginBottom: "16px" }}>
+          <div className="proof-label">Live app serving via AWS Elastic Load Balancer</div>
+          <img src="/projects/kubernetes-platform/live-app.png" alt="Live app via ELB" className="proof-img" />
           <p className="proof-caption">
-            StatusCode 200. JSON response includes message, version, environment = production, Node.js runtime, uptime, and the pod hostname — confirming the request traversed Ingress → Service → Pod.
+            portfoliod app live at the ELB DNS name: <code style={{ fontFamily: "DM Mono, monospace", fontSize: "11px", color: "var(--accent)" }}>ac5cd483460704792bef1beed33f8b79-1603561758.eu-west-2.elb.amazonaws.com</code>. Traffic flows Browser → ELB → NGINX Ingress → Service → Pod.
           </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+          <div className="proof-card">
+            <div className="proof-label">EKS nodes — 2× t3.small Ready</div>
+            <img src="/projects/kubernetes-platform/eks-nodes.png" alt="EKS nodes" className="proof-img" />
+            <p className="proof-caption">2 nodes in portfoliod-cluster-nodes node group. Both Status = Ready. CPU 19–24%, Memory 30–35%. Managed by EKS node group.</p>
+          </div>
+          <div className="proof-card">
+            <div className="proof-label">EC2 instances — worker nodes running</div>
+            <img src="/projects/kubernetes-platform/ec2-instances.png" alt="EC2 instances" className="proof-img" />
+            <p className="proof-caption">2 t3.small instances Running with 3/3 checks passed. Spread across eu-west-2a and eu-west-2b for availability zone redundancy.</p>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+          <div className="proof-card">
+            <div className="proof-label">Load balancer — 2 instances In-service</div>
+            <img src="/projects/kubernetes-platform/elb-targets.png" alt="Load balancer targets" className="proof-img" />
+            <p className="proof-caption">Both EC2 instances registered as targets with Health status = In-service. Load balancer routes traffic across both worker nodes.</p>
+          </div>
+          <div className="proof-card">
+            <div className="proof-label">ELB details — Internet-facing, 2 AZs</div>
+            <img src="/projects/kubernetes-platform/elb-details.png" alt="ELB details" className="proof-img" />
+            <p className="proof-caption">Classic load balancer. Internet-facing scheme. VPC vpc-0aad5cf237cc566bc. Available across eu-west-2a and eu-west-2b. DNS name confirmed.</p>
+          </div>
         </div>
       </div>
 
-      {/* Probe design */}
+      {/* Terraform outputs */}
       <div style={{ marginBottom: "52px" }}>
-        <div style={{ fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent)", display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
-          Health probe design
+        <div style={{ fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent)", display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+          Terraform outputs
           <span style={{ flex: 1, height: "1px", background: "var(--border)", maxWidth: "200px" }} />
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1px", background: "var(--border)" }}>
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", padding: "20px 24px", position: "relative", overflow: "hidden" }}>
+          <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
+          <pre style={{ fontFamily: "DM Mono, monospace", fontSize: "12px", color: "var(--muted)", lineHeight: 1.9, overflowX: "auto", whiteSpace: "pre-wrap" }}>
+{`cluster_endpoint = `}<span style={{ color: "var(--accent)" }}>{`"https://21F972C4047FB6CBB4CDE6F2E67ED923.gr7.eu-west-2.eks.amazonaws.com"`}</span>{`
+cluster_name     = `}<span style={{ color: "var(--accent)" }}>{`"portfoliod-cluster"`}</span>{`
+cluster_region   = `}<span style={{ color: "var(--accent)" }}>{`"eu-west-2"`}</span>{`
+github_role_arn  = `}<span style={{ color: "var(--accent)" }}>{`"arn:aws:iam::127486921697:role/portfoliod-cluster-github-deploy"`}</span>{`
+vpc_id           = `}<span style={{ color: "var(--accent)" }}>{`"vpc-0aad5cf237cc566bc"`}</span>
+          </pre>
+        </div>
+      </div>
+
+      {/* Infrastructure stack */}
+      <div style={{ marginBottom: "52px" }}>
+        <div style={{ fontSize: "10px", letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent)", display: "flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}>
+          Infrastructure stack — provisioned by Terraform
+          <span style={{ flex: 1, height: "1px", background: "var(--border)", maxWidth: "120px" }} />
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--border)" }}>
           {[
-            {
-              probe: "Startup",
-              endpoint: "GET /live",
-              config: "delay=0s · failure=6 · period=10s",
-              action: "Disables liveness until app is alive",
-              purpose: "Prevents crash loops during slow startup. App has up to 60s to start before liveness takes over."
-            },
-            {
-              probe: "Readiness",
-              endpoint: "GET /ready",
-              config: "delay=10s · failure=3 · period=5s",
-              action: "Removes pod from Service endpoints",
-              purpose: "Pod stops receiving traffic if not ready. Does not restart the container — the app keeps running."
-            },
-            {
-              probe: "Liveness",
-              endpoint: "GET /live",
-              config: "delay=30s · failure=3 · period=10s",
-              action: "Restarts the container",
-              purpose: "Catches deadlocks and zombie states. Only fires after startup probe succeeds."
-            },
-          ].map(({ probe, endpoint, config, action, purpose }) => (
-            <div key={probe} style={{ background: "var(--card)", padding: "18px 20px" }}>
-              <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", marginBottom: "8px" }}>{probe} probe</div>
-              <div style={{ fontFamily: "DM Mono, monospace", fontSize: "11px", color: "var(--text)", marginBottom: "6px", padding: "3px 8px", background: "var(--bg3)", borderRadius: "2px" }}>{endpoint}</div>
-              <div style={{ fontSize: "10px", color: "var(--dim)", marginBottom: "8px", fontFamily: "DM Mono, monospace" }}>{config}</div>
-              <div style={{ fontSize: "11px", color: "var(--accent)", marginBottom: "6px", fontWeight: 500 }}>→ {action}</div>
-              <p style={{ fontSize: "11px", color: "var(--muted)", lineHeight: 1.65 }}>{purpose}</p>
+            { layer: "VPC", detail: "Custom VPC with public + private subnets across 2 AZs. Public subnets for the load balancer, private subnets for worker nodes." },
+            { layer: "NAT Gateway", detail: "Allows private subnet nodes to pull Docker images from DockerHub without being publicly accessible." },
+            { layer: "EKS Cluster v1.31", detail: "AWS-managed Kubernetes control plane. Endpoint access: public + private. No control plane to maintain or patch." },
+            { layer: "Node Group", detail: "2× t3.small EC2 instances across eu-west-2a and eu-west-2b. Managed node group — AWS handles patching." },
+            { layer: "IAM Roles", detail: "Separate roles for EKS cluster, worker nodes, and GitHub Actions OIDC. Least-privilege policies on each." },
+            { layer: "OIDC Provider", detail: "GitHub Actions authenticates to AWS via short-lived tokens. No access keys stored in GitHub Secrets." },
+          ].map(({ layer, detail }) => (
+            <div key={layer} style={{ background: "var(--card)", padding: "18px 20px" }}>
+              <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", marginBottom: "6px" }}>{layer}</div>
+              <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.7 }}>{detail}</p>
             </div>
           ))}
         </div>
@@ -273,10 +279,10 @@ export default function KubernetesPlatformPage() {
           <span style={{ flex: 1, height: "1px", background: "var(--border)", maxWidth: "200px" }} />
         </div>
         {[
-          "imagePullPolicy: IfNotPresent is required when using locally built images in minikube. Without it, Kubernetes tries to pull from a remote registry and fails with ImagePullBackOff — even if the image exists locally inside the minikube daemon.",
-          "eval $(minikube docker-env) must be run in every new terminal session before building images. The environment variables it sets only persist for the current session — a common source of confusion when images built in one terminal are not visible inside the cluster.",
-          "The rolling update progress deadline (default 600s) applies to the whole rollout, not just a single pod. If the new image does not exist in the daemon, the rollout will time out waiting for pods that can never start — always verify images exist before kubectl set image.",
-          "npm ci requires a package-lock.json to exist — it cannot generate one. Always run npm install locally first to generate the lockfile before using npm ci in a Dockerfile or CI pipeline.",
+          "EKS cluster creation takes 10-15 minutes — significantly longer than other AWS resources. The node group takes an additional 3-5 minutes after the cluster is ready.",
+          "The IAM OIDC provider for GitHub Actions (token.actions.githubusercontent.com) is account-level. Attempting to create it twice fails with EntityAlreadyExists. Import the existing provider into Terraform state with terraform import rather than recreating it.",
+          "NGINX Ingress on EKS requires the controller service type to be LoadBalancer — this triggers AWS to provision an Elastic Load Balancer automatically. The EXTERNAL-IP shows <pending> until the ELB is fully provisioned (~2 minutes).",
+          "terraform destroy must be run after helm uninstall to avoid dependency conflicts. Helm removes Kubernetes resources first, which allows Terraform to cleanly destroy the VPC without stuck dependencies on the load balancer.",
         ].map((lesson, i) => (
           <div key={i} style={{ display: "flex", gap: "16px", padding: "14px 0", borderBottom: "1px solid var(--border)" }}>
             <span style={{ color: "var(--accent)", fontSize: "11px", fontFamily: "DM Mono, monospace", flexShrink: 0, paddingTop: "2px" }}>0{i + 1}</span>
@@ -300,18 +306,19 @@ export default function KubernetesPlatformPage() {
         </div>
       </div>
 
-      {/* Repo link + related */}
+      {/* Links */}
       <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "40px" }}>
-        <a href="https://github.com/hugdora/kubernetes-delivery-platform" target="_blank" rel="noopener noreferrer"
+        <a href="https://github.com/hugdora/portfoliod" target="_blank" rel="noopener noreferrer"
           style={{ display: "inline-flex", alignItems: "center", gap: "8px", fontSize: "12px", letterSpacing: "0.06em", color: "var(--accent)", textDecoration: "none", border: "1px solid rgba(74,240,184,0.2)", padding: "10px 20px", borderRadius: "2px" }}>
           View repository ↗
         </a>
       </div>
 
+      {/* Bottom CTA */}
       <div style={{ padding: "24px 28px", background: "var(--card)", border: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
         <div>
-          <div style={{ fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 600, color: "#fff", marginBottom: "4px" }}>See how the CI/CD pipeline deploys to this cluster</div>
-          <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.6 }}>Project 03 documents the GitHub Actions pipeline that builds the Docker image and runs helm upgrade --install.</p>
+          <div style={{ fontFamily: "Syne, sans-serif", fontSize: "14px", fontWeight: 600, color: "#fff", marginBottom: "4px" }}>See the CI/CD pipeline that deploys to this cluster</div>
+          <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.6 }}>Project 03 documents the GitHub Actions pipeline — IAM OIDC, dual-track deployments, and keyless AWS authentication.</p>
         </div>
         <Link href="/projects/cicd-pipeline"
           style={{ padding: "10px 20px", background: "var(--accent)", color: "#04060f", fontFamily: "DM Mono, monospace", fontSize: "12px", fontWeight: 500, borderRadius: "2px", textDecoration: "none", whiteSpace: "nowrap" }}>
