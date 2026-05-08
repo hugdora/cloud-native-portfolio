@@ -56,7 +56,7 @@ export default function KubernetesPlatformPage() {
         Kubernetes Delivery Platform on AWS EKS
       </h1>
       <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.75, marginBottom: "52px", maxWidth: "640px" }}>
-        A production-grade container orchestration platform deployed on AWS EKS. Terraform provisions the full infrastructure stack — VPC, EKS cluster, EC2 worker nodes, IAM roles, and OIDC provider. A static portfolio app is containerised with Docker/NGINX, packaged with Helm, and deployed automatically via GitHub Actions with IAM OIDC. An AWS Elastic Load Balancer routes external traffic through NGINX Ingress to the pods.
+        A production-grade container orchestration platform deployed on AWS EKS. Terraform provisions the full infrastructure stack: VPC, EKS cluster, EC2 worker nodes, IAM roles, and OIDC provider. A static portfolio app is containerised with Docker/NGINX, packaged with Helm, and deployed automatically via GitHub Actions with IAM OIDC. An AWS Elastic Load Balancer routes external traffic through NGINX Ingress to the pods.
       </p>
 
       {/* Architecture diagram */}
