@@ -2,16 +2,16 @@ import Link from "next/link";
 
 const experience = [
   {
-    title: "Cloud-Native Portfolio Platform (Self-Directed)",
-    company: "Independent Project",
+    title: "Devops Consultant",
+    company: "Hagital",
     period: "Mar 2026 — Present",
-    type: "Self-directed",
+    type: "Contract",
     bullets: [
-      "Designed and deployed a production-grade cloud-native platform on AWS — live at doraejangue.com.",
-      "Provisioned S3, CloudFront, ACM, Route 53, and IAM OIDC using Terraform Infrastructure as Code.",
-      "Built dual-track CI/CD pipeline with GitHub Actions: static deployment to S3/CloudFront and containerised deployment to Kubernetes via Helm.",
-      "Implemented Origin Access Control (OAC) for private S3 delivery and keyless AWS auth via IAM OIDC — no long-lived credentials stored anywhere.",
-      "Documented full engineering decisions, architecture diagrams, and case studies at doraejangue.com/projects.",
+    "Advised on and delivered a production-grade cloud-native platform on AWS, resulting in a live client-facing solution at doraejangue.com.",
+    "Led infrastructure strategy and provisioning using Terraform IaC — covering S3, CloudFront, ACM, Route 53, and IAM OIDC — ensuring scalable, auditable delivery.",
+    "Architected and implemented a dual-track CI/CD pipeline with GitHub Actions, enabling seamless static and containerised deployments to S3/CloudFront and Kubernetes via Helm.",
+    "Delivered a zero-trust security posture through Origin Access Control (OAC) and keyless AWS authentication via IAM OIDC, eliminating long-lived credential risk.",
+    "Produced comprehensive engineering documentation — including architecture diagrams and case studies — to support knowledge transfer and client transparency at doraejangue.com/projects.",
     ],
   },
   {
@@ -183,7 +183,7 @@ export default function ResumePage() {
             </div>
           </div>
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            <a href="/resume/Huguette-Dora-Edjangue-CV.pdf" download className="download-btn">
+            <a href="/Huguette-Dora-Edjangue-CV.pdf" download className="download-btn">
               Download PDF ↓
             </a>
             <a href="https://linkedin.com/in/hugdora" target="_blank" rel="noopener noreferrer" className="outline-btn">
