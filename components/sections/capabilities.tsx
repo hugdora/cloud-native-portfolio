@@ -1,25 +1,34 @@
 const groups = [
   {
-    title: "Cloud Infrastructure",
-    items: ["AWS", "IAM", "S3", "CloudFront", "Route 53", "ACM", "OAC"],
+    title: "Cloud & Infrastructure",
+    items: ["AWS EC2", "S3", "CloudFront", "IAM", "Route 53", "ACM", "GuardDuty", "Security Hub", "Azure"],
   },
   {
     title: "Infrastructure as Code",
-    items: ["Terraform", "Modules", "Env separation", "State management"],
+    items: ["Terraform", "Modular Architecture", "State Management", "Env Separation"],
   },
   {
     title: "Containers & Orchestration",
-    items: ["Docker", "Kubernetes", "Deployments", "Services", "Ingress", "Helm", "Probes"],
+    items: ["Docker", "Kubernetes", "Deployments", "Services", "Ingress", "Helm", "Health Probes"],
   },
   {
     title: "CI/CD & Automation",
-    items: ["GitHub Actions", "Jenkins", "IAM OIDC", "Build pipelines", "Quality gates"],
+    items: ["GitHub Actions", "Jenkins", "AWS CodePipeline", "CodeBuild", "IAM OIDC", "Build Pipelines", "Quality Gates", "Bash", "PowerShell"],
+  },
+  {
+    title: "Security & Compliance",
+    items: ["IAM OIDC", "OAC", "Zero Trust", "Tenable.io", "Microsoft Sentinel", "MITRE ATT&CK", "CIS Benchmarks", "ISO 27001", "GDPR"],
+  },
+  {
+    title: "Systems & Platform",
+    items: ["Linux (Ubuntu, CentOS)", "Next.js", "TypeScript", "Ansible", "KQL", "Maven"],
   },
 ];
 
 export default function Capabilities() {
   return (
-    <section style={{ padding: "56px 32px" }}>
+    <section style={{ padding: "56px 0" }}>
+      <div className="container">
       <div
         style={{
           fontSize: "10px",
@@ -53,7 +62,7 @@ export default function Capabilities() {
           letterSpacing: "-0.01em",
         }}
       >
-        Focused on shipping and operating cloud-native systems
+        A practical toolset built across cloud, security, and platform engineering
       </h2>
       <p
         style={{
@@ -114,6 +123,7 @@ export default function Capabilities() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </section>
   );

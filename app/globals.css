@@ -40,3 +40,13 @@ body {
   background: var(--border2);
   border-radius: 3px;
 }
+
+/* Layout container — matches navbar padding, caps width on wide screens */
+.container {
+  width: 100%;
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
