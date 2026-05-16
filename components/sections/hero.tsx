@@ -122,15 +122,8 @@ export default function Hero() {
           </div>
         )}
 
-        {/* Two-column layout */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 320px",
-            gap: "64px",
-            alignItems: "start",
-          }}
-        >
+        {/* Two-column layout — collapses to single column on mobile */}
+        <div className="hero-grid">
           {/* LEFT — headline, description, CTAs, stats, badges */}
           <div>
             <h1
@@ -291,15 +284,7 @@ export default function Hero() {
           </div>
 
           {/* RIGHT — about panel + certifications panel */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
-              position: "sticky",
-              top: "100px",
-            }}
-          >
+          <div className="hero-sidebar">
             {/* About Me panel */}
             <div
               style={{
@@ -377,13 +362,15 @@ export default function Hero() {
                   margin: 0,
                 }}
               >
-                Since I have started my journey in IT, I’ve been passionate about deploying and securing web platforms. 
-                I build systems where automation, reliability, and security are integrated from the start; not added later.
-                What motivates me most is creating reliable, secure, and scalable systems that people can trust.
+                Since I have started my journey in IT, I&apos;ve been passionate
+                about deploying and securing web platforms. I build systems where
+                automation, reliability, and security are integrated from the
+                start; not added later. What motivates me most is creating
+                reliable, secure, and scalable systems that people can trust.
               </p>
 
               {/* Languages */}
-              <div style={{ display: "flex", gap: "8px" }}>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {["French — Native", "English — Professional"].map((lang) => (
                   <span
                     key={lang}
@@ -438,7 +425,6 @@ export default function Hero() {
                       alignItems: "flex-start",
                     }}
                   >
-                    {/* Icon bubble */}
                     <div
                       style={{
                         width: "32px",
@@ -455,8 +441,6 @@ export default function Hero() {
                     >
                       {cert.icon}
                     </div>
-
-                    {/* Text */}
                     <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
                       <div
                         style={{
@@ -506,8 +490,30 @@ export default function Hero() {
           0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,240,184,0.4); }
           50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(74,240,184,0); }
         }
+
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1fr 320px;
+          gap: 64px;
+          align-items: start;
+        }
+
+        .hero-sidebar {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+          position: sticky;
+          top: 100px;
+        }
+
         @media (max-width: 768px) {
-          .hero-two-col { grid-template-columns: 1fr !important; }
+          .hero-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          .hero-sidebar {
+            position: static;
+          }
         }
       `}</style>
     </section>
