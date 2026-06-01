@@ -3,28 +3,28 @@ import Link from "next/link";
 const principles = [
   {
     num: "01",
-    title: "Security is not a layer — it is the foundation",
-    body: "Every system I build starts with the question: what is the minimum access needed for this to work? IAM OIDC over long-lived credentials. Private S3 origins over public buckets. OAC over legacy OAI. Least privilege is not a compliance checkbox — it is a design constraint applied from day one.",
+    title: "Security is not a layer, it is the foundation",
+    body: "Every system I build starts with the question: what is the minimum access needed for this to work? IAM OpenID Connect (OIDC) over long-lived credentials. Private S3 origins over public buckets. Origin Access Control (OAC over) legacy Origin Access Identity (OAI). Least privilege is not a compliance checkbox; it is a design constraint applied from day one.",
   },
   {
     num: "02",
     title: "Infrastructure must be reproducible",
-    body: "If the only way to rebuild your infrastructure is to remember what you clicked in the console, it is already broken. Everything I provision is in Terraform — version-controlled, reviewable, and deployable from scratch in minutes. The infrastructure is code. It lives in the repo. It has a history.",
+    body: "If the only way to rebuild your infrastructure is to remember what you clicked in the console, it is already broken. Everything I provision is in Terraform; version-controlled, reviewable, and deployable from scratch in minutes. The infrastructure is code. It lives in the repo. It has a history.",
   },
   {
     num: "03",
     title: "Automation removes human error from the critical path",
-    body: "Manual deployments introduce variability. The tenth time someone runs a deploy, they will skip a step. CI/CD pipelines enforce the same process every time — lint, type-check, test, build, deploy — regardless of who triggers them or when. Consistency at the cost of flexibility is worth it.",
+    body: "Manual deployments introduce variability. The tenth time someone runs a deploy, they will skip a step. CI/CD pipelines enforce the same process every time: scan, test, build, deploy regardless of who triggers them or when. Consistency at the cost of flexibility is worth it.",
   },
   {
     num: "04",
     title: "Simplicity is an engineering decision, not a compromise",
-    body: "The primary deployment path for this platform is S3 + CloudFront, not Kubernetes. That is intentional. Kubernetes adds real operational cost — nodes to manage, probes to tune, networking to debug. For a static site, that cost buys nothing. Use the simplest tool that meets the requirement. Add complexity only when the problem demands it.",
+    body: "The primary deployment path for this platform is S3 + CloudFront, not Kubernetes. That is intentional. Kubernetes adds real operational cost: nodes to manage, probes to tune, networking to debug. For a static site, that cost buys nothing. Use the simplest tool that meets the requirement. Add complexity only when the problem demands it.",
   },
   {
     num: "05",
     title: "Observability is built in, not bolted on",
-    body: "A system you cannot observe is a system you cannot operate. Health probes, structured logging, and deployment audit trails are not optional additions — they are part of the delivery contract. In Kubernetes, liveness and readiness probes are the difference between self-healing infrastructure and a silent failure waiting to be discovered.",
+    body: "A system you cannot observe is a system you cannot operate. Health probes, structured logging, and deployment audit trails are not optional additions, they are part of the delivery contract. In Kubernetes, liveness and readiness probes are the difference between self-healing infrastructure and a silent failure waiting to be discovered.",
   },
 ];
 
@@ -39,7 +39,7 @@ const platformLayers = [
     layer: "CDN & TLS",
     tech: "AWS CloudFront + ACM",
     role: "CloudFront terminates HTTPS, caches static assets at the edge globally, and enforces redirect-to-HTTPS on all viewer requests. The ACM certificate covers both the root and www domains.",
-    decision: "ACM certificates for CloudFront must be issued in us-east-1 — a hard AWS requirement regardless of where your origin lives.",
+    decision: "ACM certificates for CloudFront must be issued in us-east-1, a hard AWS requirement regardless of where your origin lives.",
   },
   {
     layer: "Origin",
@@ -51,19 +51,19 @@ const platformLayers = [
     layer: "URL routing",
     tech: "CloudFront Function",
     role: "A viewer-request CloudFront Function rewrites clean URLs to their index.html equivalent. /projects/ becomes /projects/index.html before the request hits S3. Without this, direct navigation returns AccessDenied.",
-    decision: "A CloudFront Function runs at the edge with sub-millisecond latency and no cold starts — significantly cheaper and faster than a Lambda@Edge for simple URL rewrites.",
+    decision: "A CloudFront Function runs at the edge with sub-millisecond latency and no cold starts; significantly cheaper and faster than a Lambda@Edge for simple URL rewrites.",
   },
   {
     layer: "IaC",
     tech: "Terraform",
-    role: "All AWS resources — S3, CloudFront, OAC, ACM, Route 53, IAM OIDC — are provisioned by Terraform. The module structure separates reusable resource definitions from environment-specific configuration.",
+    role: "All AWS resources: S3, CloudFront, OAC, ACM, Route 53, IAM OIDC; are provisioned by Terraform. The module structure separates reusable resource definitions from environment-specific configuration.",
     decision: "Terraform state files are never committed to the repository. The .gitignore excludes *.tfstate, *.tfvars, and .terraform/ from the first commit.",
   },
   {
     layer: "CI/CD",
     tech: "GitHub Actions + IAM OIDC",
     role: "Every push to main triggers a CI run. On success, two independent deploy jobs run in parallel: one syncs the static export to S3 and invalidates CloudFront, the other builds and pushes a Docker image to the registry and deploys to Kubernetes.",
-    decision: "IAM OIDC eliminates the need to store AWS access keys in GitHub Secrets. GitHub exchanges a short-lived OIDC token for an AWS role — no credentials to rotate, no secrets to leak.",
+    decision: "IAM OIDC eliminates the need to store AWS access keys in GitHub Secrets. GitHub exchanges a short-lived OIDC token for an AWS role; no credentials to rotate, no secrets to leak.",
   },
 ];
 
@@ -86,7 +86,7 @@ const twoTracks = [
     borderColor: "rgba(58,127,255,0.3)",
     bg: "rgba(58,127,255,0.04)",
     flow: ["docker build", "image registry", "helm upgrade", "rolling update", "Ingress → pods"],
-    why: "Demonstrates orchestration, health management, and platform operations — skills that matter for production workloads at scale.",
+    why: "Demonstrates orchestration, health management, and platform operations, skills that matter for production workloads at scale.",
   },
 ];
 
@@ -134,7 +134,7 @@ export default function ArchitecturePage() {
           Architecture
         </h1>
         <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.8, maxWidth: "600px" }}>
-          How I think about building systems — the principles behind every decision, the structure of the delivery platform, and the reasoning that connects security, automation, and simplicity into one coherent approach.
+          How I think about building systems; the principles behind every decision, the structure of the delivery platform, and the reasoning that connects security, automation, and simplicity into one coherent approach.
         </p>
       </div>
 
@@ -143,7 +143,7 @@ export default function ArchitecturePage() {
         <div className="section-label">Engineering principles</div>
         <h2 className="section-title">How I think before I build</h2>
         <p className="section-sub">
-          These are not rules I follow — they are positions I hold. Every architectural decision in this platform traces back to one of them.
+          These are not rules I follow, but positions I hold. Every architectural decision in this platform traces back to one of them.
         </p>
         <div>
           {principles.map((p) => (
@@ -219,7 +219,7 @@ export default function ArchitecturePage() {
         <div className="section-label">Deployment strategy</div>
         <h2 className="section-title">Two tracks, one platform</h2>
         <p className="section-sub">
-          The same codebase deploys via two independent paths. This is a deliberate architectural choice — not duplication, but demonstration of two distinct delivery patterns.
+          The same codebase deploys via two independent paths. This is a deliberate architectural choice; not duplication, but demonstration of two distinct delivery patterns.
         </p>
         <div>
           {twoTracks.map((track) => (

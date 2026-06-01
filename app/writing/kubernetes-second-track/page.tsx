@@ -86,7 +86,7 @@ export default function KubernetesSecondTrackArticle() {
 
         <h2>Why Kubernetes is still in this platform</h2>
         <p>
-          The Kubernetes deployment track exists for a different reason: demonstration. The skills required to design and operate a Kubernetes delivery pipeline — Deployments, Services, Ingress, health probes, Helm packaging, rolling updates — are directly relevant to production workloads at scale. A portfolio that only shows S3 + CloudFront leaves that entire skill set invisible.
+          The Kubernetes deployment track exists for a different reason: demonstration. The skills required to design and operate a Kubernetes delivery pipeline: Deployments, Services, Ingress, health probes, Helm packaging, rolling updates are directly relevant to production workloads at scale. A portfolio that only shows S3 + CloudFront leaves that entire skill set invisible.
         </p>
         <p>
           By running Kubernetes as a parallel track, the platform demonstrates both: the correct tool for the static hosting problem, and the ability to operate container orchestration when the problem actually requires it.
@@ -105,12 +105,12 @@ export default function KubernetesSecondTrackArticle() {
           In other words: microservices, APIs, background workers, databases, event-driven systems. Not static websites.
         </p>
         <p>
-          The most common mistake I see is organisations running Kubernetes for workloads that would be better served by a managed platform — App Runner, Fargate, Cloud Run, or even a simple S3 + CloudFront setup. The operational cost of Kubernetes is justified when the problem demands its capabilities. When it does not, you are paying complexity tax for no return.
+          The most common mistake I see is organisations running Kubernetes for workloads that would be better served by a managed platform: App Runner, Fargate, Cloud Run, or even a simple S3 + CloudFront setup. The operational cost of Kubernetes is justified when the problem demands its capabilities. When it does not, you are paying complexity tax for no return.
         </p>
 
         <h2>The takeaway</h2>
         <p>
-          Choosing the right tool is a more valuable skill than knowing many tools. The decision to use S3 + CloudFront as the primary path is not a concession — it is the technically correct answer to the problem. The decision to include Kubernetes is also correct, for a different reason entirely.
+          Choosing the right tool is a more valuable skill than knowing many tools. The decision to use S3 + CloudFront as the primary path is not a concession, it is the technically correct answer to the problem. The decision to include Kubernetes is also correct, for a different reason entirely.
         </p>
         <p>
           Good platform engineering is not about using every capability available. It is about matching capability to requirement, and being able to articulate why.

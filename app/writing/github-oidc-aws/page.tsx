@@ -51,20 +51,20 @@ export default function GitHubOIDCArticle() {
 
         <h2>What is wrong with long-lived access keys</h2>
         <p>
-          Long-lived AWS access keys have several properties that make them risky in CI/CD pipelines. They do not expire — once created, they are valid until explicitly rotated or deleted. They are stored as static secrets, which means they exist as plaintext values in GitHub's secrets store, in your shell history if you ever paste them, and potentially in debug logs if a workflow step accidentally prints environment variables.
+          Long-lived AWS access keys have several properties that make them risky in CI/CD pipelines. They do not expire once created, they are valid until explicitly rotated or deleted. They are stored as static secrets, which means they exist as plaintext values in GitHub's secrets store, in your shell history if you ever paste them, and potentially in debug logs if a workflow step accidentally prints environment variables.
         </p>
         <p>
-          They also have broad scope by default. The IAM user that owns the key may have more permissions than any single workflow needs — because it was created once and shared across multiple use cases.
+          They also have broad scope by default. The IAM user that owns the key may have more permissions than any single workflow needs, because it was created once and shared across multiple use cases.
         </p>
 
         <div className="callout warning">
           <strong>The real risk</strong>
-          A leaked AWS access key gives an attacker persistent access to your AWS account until someone notices and rotates it. With OIDC, there is nothing to leak — no key exists.
+          A leaked AWS access key gives an attacker persistent access to your AWS account until someone notices and rotates it. With OIDC, there is nothing to leak, no key exists.
         </div>
 
         <h2>How OIDC works</h2>
         <p>
-          OpenID Connect is a standard for identity federation. Instead of giving GitHub a credential to use, you configure AWS to trust GitHub's identity provider. When a workflow runs, GitHub generates a short-lived OIDC token — a signed JWT that says "this is a workflow in repository X, on branch Y, triggered by event Z." GitHub exchanges that token with AWS for temporary credentials scoped to a specific IAM role.
+          OpenID Connect is a standard for identity federation. Instead of giving GitHub a credential to use, you configure AWS to trust GitHub's identity provider. When a workflow runs, GitHub generates a short-lived OIDC token, a signed JWT that says "this is a workflow in repository X, on branch Y, triggered by event Z." GitHub exchanges that token with AWS for temporary credentials scoped to a specific IAM role.
         </p>
         <p>
           Those temporary credentials expire in 15 minutes to 1 hour. There is no static secret. Nothing to rotate. Nothing to leak. If an attacker somehow intercepts a token, it is already expired by the time they could use it.
@@ -98,7 +98,7 @@ export default function GitHubOIDCArticle() {
             <span className="step-num">02</span>
             <div className="step-content">
               <span className="step-title">Create an IAM role with a trust policy</span>
-              The trust policy defines which GitHub workflows can assume this role. You must be specific — too permissive and any GitHub repo can assume your role.
+              The trust policy defines which GitHub workflows can assume this role. You must be specific, too permissive and any GitHub repo can assume your role.
             </div>
           </div>
           <div className="step">
@@ -117,7 +117,7 @@ export default function GitHubOIDCArticle() {
           </div>
         </div>
 
-        <h2>The trust policy — get this right</h2>
+        <h2>The trust policy, get this right</h2>
         <p>
           The trust policy is where most mistakes happen. Here is what a correct one looks like:
         </p>
@@ -147,7 +147,7 @@ export default function GitHubOIDCArticle() {
         </div>
 
         <p>
-          The highlighted condition is critical. It locks the role to a specific repository and branch. Without it, any public GitHub repository could assume your role. The <strong>sub</strong> claim in the OIDC token contains the repo name and ref — always validate both.
+          The highlighted condition is critical. It locks the role to a specific repository and branch. Without it, any public GitHub repository could assume your role. The <strong>sub</strong> claim in the OIDC token contains the repo name and ref, always validate both.
         </p>
 
         <h2>The workflow configuration</h2>

@@ -30,7 +30,7 @@ const channels = [
     label: "Portfolio",
     value: "doraejangue.com",
     href: "https://doraejangue.com",
-    desc: "Projects, architecture, writing, and resume — all in one place.",
+    desc: "Projects, architecture, writing, and resume, all in one place.",
     cta: "Browse site →",
   },
 ];
@@ -109,7 +109,7 @@ export default function ContactPage() {
           Contact
         </h1>
         <p style={{ color: "var(--muted)", fontSize: "14px", lineHeight: 1.75, maxWidth: "520px" }}>
-          Open to remote freelance opportunities in Platform Engineering, DevOps, and Cloud Security. If you are building something with AWS, Terraform, Kubernetes, or GitHub Actions — let&apos;s talk.
+          Open to remote freelance opportunities in Platform Engineering, DevOps, and Cloud Security. If you are building something with AWS, Terraform, Kubernetes, or GitHub Actions, let&apos;s talk.
         </p>
       </div>
 
@@ -203,7 +203,7 @@ export default function ContactPage() {
             Want to see my full background?
           </div>
           <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.6 }}>
-            5+ years of experience across cloud, DevOps, and security — with a downloadable CV.
+            5+ years of experience across cloud, DevOps, and security, with a downloadable CV.
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>

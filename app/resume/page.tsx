@@ -8,10 +8,10 @@ const experience = [
     type: "Contract",
     bullets: [
     "Advised on and delivered a production-grade cloud-native platform on AWS, resulting in a live client-facing solution at doraejangue.com.",
-    "Led infrastructure strategy and provisioning using Terraform IaC — covering S3, CloudFront, ACM, Route 53, and IAM OIDC — ensuring scalable, auditable delivery.",
+    "Led infrastructure strategy and provisioning using Terraform IaC: covering S3, CloudFront, ACM, Route 53, and IAM OIDC; ensuring scalable, auditable delivery.",
     "Architected and implemented a dual-track CI/CD pipeline with GitHub Actions, enabling seamless static and containerised deployments to S3/CloudFront and Kubernetes via Helm.",
     "Delivered a zero-trust security posture through Origin Access Control (OAC) and keyless AWS authentication via IAM OIDC, eliminating long-lived credential risk.",
-    "Produced comprehensive engineering documentation — including architecture diagrams and case studies — to support knowledge transfer and client transparency at doraejangue.com/projects.",
+    "Produced comprehensive engineering documentation; including architecture diagrams and case studies, to support knowledge transfer and client transparency at doraejangue.com/projects.",
     ],
   },
   {
@@ -22,7 +22,7 @@ const experience = [
     bullets: [
       "Deployed and optimised SIEM and EDR tooling to enhance monitoring and incident detection.",
       "Designed custom detection logic for brute-force, ransomware, and data exfiltration scenarios mapped to MITRE ATT&CK.",
-      "Managed full vulnerability lifecycle using Tenable.io — achieved 100% reduction in critical vulnerabilities.",
+      "Managed full vulnerability lifecycle using Tenable.io, achieved 100% reduction in critical vulnerabilities.",
       "Implemented secure AWS configurations aligned to CIS benchmarks and Well-Architected Security Pillar.",
       "Automated remediation tasks using PowerShell and improved monitoring dashboards with KQL.",
     ],
@@ -199,7 +199,7 @@ export default function ResumePage() {
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", padding: "24px 28px", position: "relative", overflow: "hidden" }}>
           <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1px", background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
           <p style={{ fontSize: "14px", color: "var(--muted)", lineHeight: 1.85, maxWidth: "680px" }}>
-            Platform & DevOps Engineer with 5+ years of experience designing and implementing cloud infrastructure, CI/CD pipelines, and security controls across AWS environments. Proven track record of embedding security into engineering workflows — achieving a 100% reduction in critical vulnerabilities, 30% cloud cost reduction, and 40% improvement in development efficiency. Strong foundation in Infrastructure as Code, container orchestration, and cloud-native delivery with hands-on expertise in Terraform, Kubernetes, Docker, GitHub Actions, and AWS.
+            Platform & DevOps Engineer with 5+ years of experience designing and implementing cloud infrastructure, CI/CD pipelines, and security controls across AWS environments. Proven track record of embedding security into engineering workflows, achieving a 100% reduction in critical vulnerabilities, 30% cloud cost reduction, and 40% improvement in development efficiency. Strong foundation in Infrastructure as Code, container orchestration, and cloud-native delivery with hands-on expertise in Terraform, Kubernetes, Docker, GitHub Actions, and AWS.
           </p>
         </div>
       </div>

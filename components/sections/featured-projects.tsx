@@ -75,7 +75,7 @@ export default function FeaturedProjects() {
         }}
       >
         Each project is documented with architecture decisions, trade-offs,
-        delivery workflow, and operational design — not just code.
+        delivery workflow, and operational design; not just code.
       </p>
 
       <div style={{ display: "grid", gap: "1px", background: "var(--border)" }}>

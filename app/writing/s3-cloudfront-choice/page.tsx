@@ -38,7 +38,7 @@ export default function KubernetesSecondTrackArticle() {
 
       <div className="article-body">
         <p>
-          Kubernetes is one of the most impressive pieces of infrastructure software ever built. It solves genuinely hard problems — container scheduling, self-healing, rolling deployments, service discovery, horizontal scaling — at a level of sophistication that took years to develop.
+          Kubernetes is one of the most impressive pieces of infrastructure software ever built. It solves genuinely hard problems; container scheduling, self-healing, rolling deployments, service discovery, horizontal scaling, at a level of sophistication that took years to develop.
         </p>
         <p>
           It is also completely unnecessary for serving a static portfolio website. And I think that distinction is worth writing about, because the instinct in the DevOps world is often to reach for the most powerful tool available rather than the most appropriate one.
@@ -86,7 +86,7 @@ export default function KubernetesSecondTrackArticle() {
 
         <h2>Why Kubernetes is still in this platform</h2>
         <p>
-          The Kubernetes deployment track exists for a different reason: demonstration. The skills required to design and operate a Kubernetes delivery pipeline — Deployments, Services, Ingress, health probes, Helm packaging, rolling updates — are directly relevant to production workloads at scale. A portfolio that only shows S3 + CloudFront leaves that entire skill set invisible.
+          The Kubernetes deployment track exists for a different reason: demonstration. The skills required to design and operate a Kubernetes delivery pipeline: Deployments, Services, Ingress, health probes, Helm packaging, rolling updates, are directly relevant to production workloads at scale. A portfolio that only shows S3 + CloudFront leaves that entire skill set invisible.
         </p>
         <p>
           By running Kubernetes as a parallel track, the platform demonstrates both: the correct tool for the static hosting problem, and the ability to operate container orchestration when the problem actually requires it.
@@ -110,7 +110,7 @@ export default function KubernetesSecondTrackArticle() {
 
         <h2>The takeaway</h2>
         <p>
-          Choosing the right tool is a more valuable skill than knowing many tools. The decision to use S3 + CloudFront as the primary path is not a concession — it is the technically correct answer to the problem. The decision to include Kubernetes is also correct, for a different reason entirely.
+          Choosing the right tool is a more valuable skill than knowing many tools. The decision to use S3 + CloudFront as the primary path is not a concession, it is the technically correct answer to the problem. The decision to include Kubernetes is also correct, for a different reason entirely.
         </p>
         <p>
           Good platform engineering is not about using every capability available. It is about matching capability to requirement, and being able to articulate why.

@@ -83,7 +83,7 @@ export default function TechnicalWriting() {
           }}
         >
           Short notes on the architectural decisions made while building this
-          platform — not documentation summaries, but implementation experience.
+          platform not documentation summaries only, but implementation experience.
         </p>
 
         <div

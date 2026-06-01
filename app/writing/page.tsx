@@ -12,7 +12,7 @@ const posts = [
   {
     num: "02",
     title: "Why Kubernetes is a second deployment track, not the primary one",
-    summary: "Kubernetes is powerful, but power has a cost. Here is how I thought about when to use it and when not to — and why that decision matters more than the technology itself.",
+    summary: "Kubernetes is powerful, but power has a cost. Here is how I thought about when to use it and when not to, and why that decision matters more than the technology itself.",
     tags: ["Kubernetes", "Architecture", "Decision-making"],
     readTime: "6 min read",
     href: "/writing/kubernetes-second-track",
@@ -27,7 +27,7 @@ const posts = [
   },
   {
     num: "04",
-    title: "Readiness vs liveness probes in Kubernetes — what I learned",
+    title: "Readiness vs liveness probes in Kubernetes; what I learned",
     summary: "They look similar, they are configured the same way, but they do fundamentally different things. Confusing them is one of the most common Kubernetes mistakes.",
     tags: ["Kubernetes", "Operations", "Reliability"],
     readTime: "5 min read",
@@ -96,7 +96,7 @@ export default function WritingPage() {
       {/* Footer note */}
       <div style={{ padding: "20px 24px", background: "var(--card)", border: "1px solid var(--border)", borderLeft: "2px solid var(--accent)" }}>
         <p style={{ fontSize: "12px", color: "var(--muted)", lineHeight: 1.75 }}>
-          These articles are written from implementation experience — not documentation summaries. Every decision described here was made while building and deploying this platform.
+          These articles are written from implementation experience, not documentation summaries. Every decision described here was made while building and deploying this platform.
         </p>
       </div>
     </main>
