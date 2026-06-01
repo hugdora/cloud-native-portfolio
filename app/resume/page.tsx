@@ -183,7 +183,7 @@ export default function ResumePage() {
             </div>
           </div>
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            <a href="/Huguette-Dora-Edjangue-CV.pdf" download className="download-btn">
+            <a href="/Dora-DevOps-Engineer.pdf" download className="download-btn">
               Download PDF ↓
             </a>
             <a href="https://linkedin.com/in/hugdora" target="_blank" rel="noopener noreferrer" className="outline-btn">
